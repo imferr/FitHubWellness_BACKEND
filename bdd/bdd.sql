@@ -74,7 +74,7 @@ CREATE TABLE PERSONAL_RECORD (
 -- Table: TYPE_GOAL
 CREATE TABLE TYPE_GOAL (
     typeGoalId Serial  NOT NULL,
-    type varchar(30)  NOT NULL,
+    type varchar(100)  NOT NULL,
     CONSTRAINT TYPE_GOAL_pk PRIMARY KEY (typeGoalId)
 );
 
