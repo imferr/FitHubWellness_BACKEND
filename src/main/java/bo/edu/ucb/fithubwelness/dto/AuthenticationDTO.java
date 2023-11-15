@@ -1,21 +1,21 @@
 package bo.edu.ucb.fithubwelness.dto;
 
-import java.sql.Time;
+import java.sql.Timestamp;
 
 public class AuthenticationDTO {
     
     private int authenticationId;
     private String token;
-    private Time expirationTime;
+    private Timestamp expirationDate;
     private UserDTO user;
 
     public AuthenticationDTO() {
     }
 
-    public AuthenticationDTO(int authenticationId, String token, Time expirationTime, UserDTO user) {
+    public AuthenticationDTO(int authenticationId, String token, Timestamp expirationDate, UserDTO user) {
         this.authenticationId = authenticationId;
         this.token = token;
-        this.expirationTime = expirationTime;
+        this.expirationDate = expirationDate;
         this.user = user;
     }
 
@@ -29,8 +29,8 @@ public class AuthenticationDTO {
         return token;
     }
 
-    public Time getExpirationTime() {
-        return expirationTime;
+    public Timestamp getexpirationDate() {
+        return expirationDate;
     }
 
     public UserDTO getUser() {
@@ -47,8 +47,8 @@ public class AuthenticationDTO {
         this.token = token;
     }
 
-    public void setExpirationTime(Time expirationTime) {
-        this.expirationTime = expirationTime;
+    public void setexpirationDate(Timestamp expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public void setUser(UserDTO user) {
@@ -62,7 +62,7 @@ public class AuthenticationDTO {
         return "AuthenticationDTO{" +
                 "authenticationId=" + authenticationId +
                 ", token='" + token + '\'' +
-                ", expirationTime=" + expirationTime +
+                ", expirationDate=" + expirationDate +
                 ", user=" + user +
                 '}';
     }
