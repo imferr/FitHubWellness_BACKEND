@@ -1,5 +1,7 @@
 package bo.edu.ucb.fithubwelness.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +20,7 @@ public class EvaluationEntity {
     private Integer height;
 
     @Column(name = "date", nullable = false)
-    private String date;
+    private Date date;
 
     @Column(name = "imc", nullable = false)
     private Double imc;
@@ -33,7 +35,7 @@ public class EvaluationEntity {
     public EvaluationEntity() {
     }
 
-    public EvaluationEntity(Integer evaluationId, Double weight, Integer height, String date, Double imc, String state, UserEntity userId) {
+    public EvaluationEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc, String state, UserEntity userId) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
@@ -57,7 +59,7 @@ public class EvaluationEntity {
         return height;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -87,7 +89,7 @@ public class EvaluationEntity {
         this.height = height;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -111,9 +113,9 @@ public class EvaluationEntity {
                 "evaluationId=" + evaluationId + 
                 ", weight=" + weight + 
                 ", height=" + height + 
-                ", date=" + date + 
+                ", date='" + date + '\'' + 
                 ", imc=" + imc + 
-                ", state=" + state + 
+                ", state='" + state + '\'' + 
                 ", userId=" + userId + 
                 '}';
     }

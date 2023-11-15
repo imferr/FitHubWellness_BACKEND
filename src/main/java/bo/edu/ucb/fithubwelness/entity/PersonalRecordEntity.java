@@ -1,5 +1,7 @@
 package bo.edu.ucb.fithubwelness.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,7 +20,7 @@ public class PersonalRecordEntity {
     private Integer repetitions;
 
     @Column(name = "date", nullable = false)
-    private String date;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "goal_goalid", referencedColumnName = "goalid", nullable = false)
@@ -27,7 +29,7 @@ public class PersonalRecordEntity {
     public PersonalRecordEntity() {
     }
 
-    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, String date, GoalEntity goalId) {
+    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, Date date, GoalEntity goalId) {
         this.personalRecordId = personalRecordId;
         this.weight = weight;
         this.repetitions = repetitions;
@@ -49,7 +51,7 @@ public class PersonalRecordEntity {
         return repetitions;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -71,7 +73,7 @@ public class PersonalRecordEntity {
         this.repetitions = repetitions;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -83,11 +85,11 @@ public class PersonalRecordEntity {
 
     @Override
     public String toString() {
-        return "PersonalRecordDTO{" +
+        return "PersonalRecordEntity{" + 
                 "personalRecordId=" + personalRecordId + 
                 ", weight=" + weight + 
                 ", repetitions=" + repetitions + 
-                ", date=" + date + 
+                ", date='" + date + '\'' + 
                 ", goalId=" + goalId + 
                 '}';
     }
