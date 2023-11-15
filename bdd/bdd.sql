@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2023-11-15 03:00:20.61
+-- Last modification date: 2023-11-15 03:52:27.524
 
 -- tables
 -- Table: AUTHENTICATION
@@ -37,7 +37,7 @@ CREATE TABLE EVALUATION (
     date date  NOT NULL,
     imc numeric(10,5)  NOT NULL,
     estado varchar(30)  NOT NULL,
-    USERS_userId serial  NOT NULL,
+    USERS_userId Serial  NOT NULL,
     CONSTRAINT EVALUATION_pk PRIMARY KEY (evaluationId)
 );
 
@@ -46,6 +46,7 @@ CREATE TABLE EXERCISE (
     exerciseId Serial  NOT NULL,
     name varchar(100)  NOT NULL,
     description varchar(500)  NOT NULL,
+    linkPicture varchar(500)  NOT NULL,
     CONSTRAINT EXERCISE_pk PRIMARY KEY (exerciseId)
 );
 
