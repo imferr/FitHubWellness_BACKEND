@@ -37,6 +37,9 @@ public class TypeTrainingDTO {
 
     @Override
     public String toString() {
-        return "TypeTrainingDTO{" + "typeTrainingId=" + typeTrainingId + ", typeTraining=" + typeTraining + '}';
+        return "TypeTrainingDTO{" + 
+                "typeTrainingId=" + typeTrainingId + 
+                ", typeTraining=" + typeTraining + 
+                '}';
     }
 }

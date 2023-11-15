@@ -37,6 +37,9 @@ public class TypeGoalDTO {
 
     @Override
     public String toString() {
-        return "TypeGoalDTO{" + "typeGoalId=" + typeGoalId + ", typeGoal=" + typeGoal + '}';
+        return "TypeGoalDTO{" + 
+                "typeGoalId=" + typeGoalId + 
+                ", typeGoal=" + typeGoal + 
+                '}';
     }
 }

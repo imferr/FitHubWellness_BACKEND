@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2023-11-15 03:52:27.524
+-- Last modification date: 2023-11-15 03:57:25.002
 
 -- tables
 -- Table: AUTHENTICATION
@@ -53,7 +53,6 @@ CREATE TABLE EXERCISE (
 -- Table: GOAL
 CREATE TABLE GOAL (
     goalId Serial  NOT NULL,
-    description varchar(500)  NOT NULL,
     accomplished boolean  NOT NULL,
     quantity numeric(10,5)  NOT NULL,
     USERS_userId Serial  NOT NULL,
@@ -177,4 +176,3 @@ ALTER TABLE PERSONAL_RECORD ADD CONSTRAINT PERSONAL_RECORD_GOAL
 ;
 
 -- End of file.
-

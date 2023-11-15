@@ -57,6 +57,11 @@ public class ExerciseDTO {
 
     @Override
     public String toString() {
-        return "ExerciseDTO{" + "exerciseId=" + exerciseId + ", name=" + name + ", description=" + description + ", linkPicture=" + linkPicture + '}';
+        return "ExerciseDTO{" +
+                "exerciseId=" + exerciseId + 
+                ", name=" + name + 
+                ", description=" + description + 
+                ", linkPicture=" + linkPicture + 
+                '}';
     }
 }
