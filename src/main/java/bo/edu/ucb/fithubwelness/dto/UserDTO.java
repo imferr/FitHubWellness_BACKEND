@@ -7,15 +7,18 @@ public class UserDTO {
     private String name;
     private String email;
     private Date birthday;
+    private boolean isNewUser; // Nuevo campo para indicar si el usuario es nuevo.
 
     public UserDTO() {
     }
 
-    public UserDTO(int userId, String name, String email, Date birthday) {
+    // Considera agregar un nuevo constructor que incluya el campo isNewUser si es necesario.
+    public UserDTO(int userId, String name, String email, Date birthday, boolean isNewUser) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.birthday = birthday;
+        this.isNewUser = isNewUser; // Inicializar el nuevo campo.
     }
 
     //getters:
@@ -36,6 +39,10 @@ public class UserDTO {
         return birthday;
     }
 
+    public boolean isNewUser() { // Getter para el nuevo campo.
+        return isNewUser;
+    }
+
     //setters:
 
     public void setUserId(int userId) {
@@ -47,22 +54,28 @@ public class UserDTO {
     }
 
     public void setEmail(String email) {
-        this.email= email;
+        this.email = email;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
+    public void setNewUser(boolean isNewUser) { // Setter para el nuevo campo.
+        this.isNewUser = isNewUser;
+    }
+
     //toString:
 
     @Override
     public String toString() {
+        // Asegúrate de agregar el campo isNewUser en el método toString.
         return "UserDTO{" +
                 "userId=" + userId +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
+                ", isNewUser=" + isNewUser +
                 '}';
     }
 }

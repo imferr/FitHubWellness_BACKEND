@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/exercise")
+@RequestMapping("/api/v1/exercise")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExerciseAPI {
 

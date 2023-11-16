@@ -21,17 +21,28 @@ public class UserBL {
     public UserDTO findOrCreateUser(UserDTO userDTO) {
         Optional<UserEntity> existingUser = userDAO.findByEmail(userDTO.getEmail());
         if (existingUser.isPresent()) {
-            return convertToDTO(existingUser.get());
+            UserDTO dto = convertToDTO(existingUser.get());
+            dto.setNewUser(false);
+            return dto;
         } else {
             UserEntity newUser = convertToEntity(userDTO);
             newUser = userDAO.save(newUser);
-            return convertToDTO(newUser);
+            UserDTO dto = convertToDTO(newUser);
+            dto.setNewUser(true);
+            return dto;
         }
     }
 
     private UserDTO convertToDTO(UserEntity userEntity) {
-        return new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday());
-    }
+        // Asumimos que este método siempre se llama para usuarios existentes, por lo que isNewUser es false.
+        return new UserDTO(
+            userEntity.getUserId(), 
+            userEntity.getName(), 
+            userEntity.getEmail(), 
+            userEntity.getBirthday(), 
+            false // Asumimos que el usuario no es nuevo porque ya está siendo convertido de una entidad
+        );
+    }    
 
     private UserEntity convertToEntity(UserDTO userDTO) {
         return new UserEntity(userDTO.getUserId(), userDTO.getName(), userDTO.getEmail(), userDTO.getBirthday());

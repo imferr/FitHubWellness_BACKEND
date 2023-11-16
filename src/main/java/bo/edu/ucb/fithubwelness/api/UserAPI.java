@@ -7,7 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserAPI {
 
     private final UserBL userBL;
