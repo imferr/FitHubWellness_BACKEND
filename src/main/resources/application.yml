@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bddfithub
+    url: jdbc:postgresql://localhost:5434/bddfithub
     username: postgres
-    password: abc
+    password: abc123
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.spatial.dialect.postgis.PostgisDialect
@@ -13,3 +13,8 @@ spring:
         ddl-auto: none
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
+
+# Configuración para la API de wger
+wger:
+  username: imferrr
+  password: mfgs2003

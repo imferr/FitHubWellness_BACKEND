@@ -29,7 +29,7 @@ Para hacer correr este proyecto se necesita tener instalado:
 2. Luego se debe crear el contenedor:
 
     ```bash
-    docker run --name fithub -e POSTGRES_PASSWORD=abc -d -p 5432:5432 postgres
+    docker run --name fithub -e POSTGRES_PASSWORD=abc123 -d -p 5434:5432 postgres
     ```
 
 3. Para verificar que el contenedor se encuentra corriendo se debe ejecutar el siguiente comando:
