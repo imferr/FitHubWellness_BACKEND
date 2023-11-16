@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/exercise")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ExerciseAPI {
 
     private final ExerciseBL exerciseBL;

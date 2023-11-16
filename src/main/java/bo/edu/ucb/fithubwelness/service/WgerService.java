@@ -25,7 +25,6 @@ public class WgerService {
     private String jwtToken;
 
     public WgerService() {
-        // Constructor vacío
     }
 
     private boolean authenticate() {
@@ -38,12 +37,12 @@ public class WgerService {
             ResponseEntity<Map> response = restTemplate.postForEntity(authUrl, entity, Map.class);
             if (response.getBody() != null) {
                 jwtToken = (String) response.getBody().get("access");
-                return true; // Autenticación exitosa
+                return true;
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Log the exception
+            e.printStackTrace();
         }
-        return false; // Autenticación fallida
+        return false;
     }
 
     private HttpHeaders createHeaders() {
