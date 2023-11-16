@@ -21,19 +21,35 @@ public class UserBL {
     public UserDTO findOrCreateUser(UserDTO userDTO) {
         Optional<UserEntity> existingUser = userDAO.findByEmail(userDTO.getEmail());
         if (existingUser.isPresent()) {
-            return convertToDTO(existingUser.get());
+            UserDTO dto = convertToDTO(existingUser.get());
+            dto.setNewUser(false);
+            return dto;
         } else {
             UserEntity newUser = convertToEntity(userDTO);
             newUser = userDAO.save(newUser);
-            return convertToDTO(newUser);
+            UserDTO dto = convertToDTO(newUser);
+            dto.setNewUser(true);
+            return dto;
         }
     }
 
     private UserDTO convertToDTO(UserEntity userEntity) {
-        return new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday());
-    }
+        return new UserDTO(
+            userEntity.getUserId(), 
+            userEntity.getName(), 
+            userEntity.getEmail(), 
+            userEntity.getBirthday(), 
+            false
+        );
+    }    
 
     private UserEntity convertToEntity(UserDTO userDTO) {
         return new UserEntity(userDTO.getUserId(), userDTO.getName(), userDTO.getEmail(), userDTO.getBirthday());
     }
+
+    public UserDTO getUserById(int id) {
+        Optional<UserEntity> userEntity = userDAO.findById(id);
+        return userEntity.map(this::convertToDTO).orElse(null);
+    }
+    
 }

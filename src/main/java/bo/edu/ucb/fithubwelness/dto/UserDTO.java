@@ -7,15 +7,17 @@ public class UserDTO {
     private String name;
     private String email;
     private Date birthday;
+    private boolean isNewUser;
 
     public UserDTO() {
     }
 
-    public UserDTO(int userId, String name, String email, Date birthday) {
+    public UserDTO(int userId, String name, String email, Date birthday, boolean isNewUser) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.birthday = birthday;
+        this.isNewUser = isNewUser;
     }
 
     //getters:
@@ -36,6 +38,10 @@ public class UserDTO {
         return birthday;
     }
 
+    public boolean isNewUser() {
+        return isNewUser;
+    }
+
     //setters:
 
     public void setUserId(int userId) {
@@ -47,11 +53,15 @@ public class UserDTO {
     }
 
     public void setEmail(String email) {
-        this.email= email;
+        this.email = email;
     }
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public void setNewUser(boolean isNewUser) {
+        this.isNewUser = isNewUser;
     }
 
     //toString:
@@ -63,6 +73,7 @@ public class UserDTO {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
+                ", isNewUser=" + isNewUser +
                 '}';
     }
 }

@@ -90,7 +90,7 @@ CREATE TABLE USERS (
     userId Serial  NOT NULL,
     name varchar(100)  NOT NULL,
     email varchar(100)  NOT NULL,
-    birthday date  NOT NULL,
+    birthday date ,
     CONSTRAINT USERS_pk PRIMARY KEY (userId)
 );
 

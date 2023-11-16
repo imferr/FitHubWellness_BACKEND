@@ -19,7 +19,7 @@ public class UserEntity {
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday", nullable = true)
     private Date birthday;
 
     public UserEntity() {
