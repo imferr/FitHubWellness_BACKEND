@@ -23,4 +23,15 @@ public class UserAPI {
         UserDTO user = userBL.findOrCreateUser(userDTO);
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+        UserDTO user = userBL.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

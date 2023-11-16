@@ -34,17 +34,22 @@ public class UserBL {
     }
 
     private UserDTO convertToDTO(UserEntity userEntity) {
-        // Asumimos que este método siempre se llama para usuarios existentes, por lo que isNewUser es false.
         return new UserDTO(
             userEntity.getUserId(), 
             userEntity.getName(), 
             userEntity.getEmail(), 
             userEntity.getBirthday(), 
-            false // Asumimos que el usuario no es nuevo porque ya está siendo convertido de una entidad
+            false
         );
     }    
 
     private UserEntity convertToEntity(UserDTO userDTO) {
         return new UserEntity(userDTO.getUserId(), userDTO.getName(), userDTO.getEmail(), userDTO.getBirthday());
     }
+
+    public UserDTO getUserById(int id) {
+        Optional<UserEntity> userEntity = userDAO.findById(id);
+        return userEntity.map(this::convertToDTO).orElse(null);
+    }
+    
 }
