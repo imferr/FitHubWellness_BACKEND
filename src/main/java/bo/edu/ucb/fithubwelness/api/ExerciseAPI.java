@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/v1/exercise")
@@ -14,6 +15,7 @@ import java.util.List;
 public class ExerciseAPI {
 
     private final ExerciseBL exerciseBL;
+    private static final Logger LOGGER = Logger.getLogger(ExerciseAPI.class.getName());
 
     @Autowired
     public ExerciseAPI(ExerciseBL exerciseBL) {
@@ -22,6 +24,15 @@ public class ExerciseAPI {
 
     @GetMapping()
     public ResponseEntity<List<ExerciseDTO>> getAllExercises() {
-        return ResponseEntity.ok(exerciseBL.findAllExercises());
+        LOGGER.info("Iniciando el proceso de obtener todos los ejercicios");
+        try {
+            List<ExerciseDTO> exercises = exerciseBL.findAllExercises();
+            return ResponseEntity.ok(exercises);
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al obtener los ejercicios");
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de obtener todos los ejercicios");
+        }
     }
 }

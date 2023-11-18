@@ -21,35 +21,35 @@ public class UserBL {
     public UserDTO findOrCreateUser(UserDTO userDTO) {
         Optional<UserEntity> existingUser = userDAO.findByEmail(userDTO.getEmail());
         if (existingUser.isPresent()) {
-            UserDTO dto = convertToDTO(existingUser.get());
-            dto.setNewUser(false);
+            UserEntity userEntity = existingUser.get();
+            UserDTO dto = new UserDTO(
+                userEntity.getUserId(),
+                userEntity.getName(),
+                userEntity.getEmail(),
+                userEntity.getBirthday()
+            );
             return dto;
         } else {
-            UserEntity newUser = convertToEntity(userDTO);
+            UserEntity newUser = new UserEntity();
+            newUser.setName(userDTO.getName());
+            newUser.setEmail(userDTO.getEmail());
+            newUser.setBirthday(userDTO.getBirthday());
+    
             newUser = userDAO.save(newUser);
-            UserDTO dto = convertToDTO(newUser);
-            dto.setNewUser(true);
+    
+            UserDTO dto = new UserDTO(
+                newUser.getUserId(),
+                newUser.getName(),
+                newUser.getEmail(),
+                newUser.getBirthday()
+            );
             return dto;
         }
     }
 
-    private UserDTO convertToDTO(UserEntity userEntity) {
-        return new UserDTO(
-            userEntity.getUserId(), 
-            userEntity.getName(), 
-            userEntity.getEmail(), 
-            userEntity.getBirthday(), 
-            false
-        );
-    }    
+    public boolean emailExists(String email) {
+    Optional<UserEntity> existingUser = userDAO.findByEmail(email);
+    return existingUser.isPresent();
+}
 
-    private UserEntity convertToEntity(UserDTO userDTO) {
-        return new UserEntity(userDTO.getUserId(), userDTO.getName(), userDTO.getEmail(), userDTO.getBirthday());
-    }
-
-    public UserDTO getUserById(int id) {
-        Optional<UserEntity> userEntity = userDAO.findById(id);
-        return userEntity.map(this::convertToDTO).orElse(null);
-    }
-    
 }

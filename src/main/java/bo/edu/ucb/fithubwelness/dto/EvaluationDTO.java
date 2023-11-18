@@ -51,7 +51,7 @@ public class EvaluationDTO {
         return state;
     }
 
-    public UserDTO getUser() {
+    public UserDTO getUserId() {
         return user;
     }
 
@@ -81,7 +81,7 @@ public class EvaluationDTO {
         this.state = state;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUserId(UserDTO user) {
         this.user = user;
     }
 

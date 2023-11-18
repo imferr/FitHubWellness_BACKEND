@@ -2,7 +2,11 @@ package bo.edu.ucb.fithubwelness.api;
 
 import bo.edu.ucb.fithubwelness.bl.UserBL;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
+
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserAPI {
 
     private final UserBL userBL;
+    private static final Logger LOGGER = Logger.getLogger(UserAPI.class.getName());
 
     @Autowired
     public UserAPI(UserBL userBL) {
@@ -20,17 +25,21 @@ public class UserAPI {
 
     @PostMapping("/findOrCreate")
     public ResponseEntity<UserDTO> findOrCreateUser(@RequestBody UserDTO userDTO) {
-        UserDTO user = userBL.findOrCreateUser(userDTO);
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
-        UserDTO user = userBL.getUserById(id);
-        if (user != null) {
+        LOGGER.info("Iniciando el proceso de creación de usuario");
+        try {
+            boolean emailExists = userBL.emailExists(userDTO.getEmail());
+            if (!emailExists) {
+                LOGGER.info("Correo no encontrado en la base de datos. Redirigiendo a la página de first evaluation.");
+                return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/firstevaluation").build();
+            }
+            UserDTO user = userBL.findOrCreateUser(userDTO);
+            LOGGER.info("Usuario creado exitosamente");
             return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al crear el usuario");
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de creación de usuario");
         }
     }
 

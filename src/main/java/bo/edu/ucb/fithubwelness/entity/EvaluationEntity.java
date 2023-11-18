@@ -25,7 +25,7 @@ public class EvaluationEntity {
     @Column(name = "imc", nullable = false)
     private Double imc;
 
-    @Column(name = "state", nullable = false)
+    @Column(name = "estado", nullable = false)
     private String state;
 
     @ManyToOne
