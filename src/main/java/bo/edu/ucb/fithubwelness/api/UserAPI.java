@@ -60,6 +60,8 @@ public class UserAPI {
         } catch (Exception e) {
             LOGGER.info("Ocurrió un error al crear el usuario" + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de creación de usuario con evaluación");
         }
     }
 
