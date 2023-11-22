@@ -10,19 +10,19 @@ public class EvaluationDTO {
     private Date date;
     private Double imc;
     private String state;
-    private UserDTO user;
+    private UserDTO userId;
 
     public EvaluationDTO() {
     }
 
-    public EvaluationDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state, UserDTO user) {
+    public EvaluationDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state, UserDTO userId) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
         this.date = date;
         this.imc = imc;
         this.state = state;
-        this.user = user;
+        this.userId = userId;
     }
 
     //getters:
@@ -52,7 +52,7 @@ public class EvaluationDTO {
     }
 
     public UserDTO getUserId() {
-        return user;
+        return userId;
     }
 
     //setters:
@@ -81,8 +81,8 @@ public class EvaluationDTO {
         this.state = state;
     }
 
-    public void setUserId(UserDTO user) {
-        this.user = user;
+    public void setUserId(UserDTO userId) {
+        this.userId = userId;
     }
 
     //toString:
@@ -96,7 +96,7 @@ public class EvaluationDTO {
                 ", date=" + date +
                 ", imc=" + imc +
                 ", state='" + state + '\'' +
-                ", user=" + user +
+                ", userId=" + userId +
                 '}';
     }
 }

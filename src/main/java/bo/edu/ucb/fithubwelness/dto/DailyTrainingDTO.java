@@ -63,7 +63,7 @@ public class DailyTrainingDTO {
                 "dailyTrainingId=" + dailyTrainingId + 
                 ", date=" + date + 
                 ", typeTraining=" + typeTraining + 
-                ", user=" + userId + 
+                ", userId=" + userId + 
                 '}';
     }
 }
