@@ -23,7 +23,7 @@ CREATE TABLE CHATGPT_RESPONSE (
 -- Table: DAILY_TRAINING
 CREATE TABLE DAILY_TRAINING (
     dailyId Serial  NOT NULL,
-    date timestamp  NOT NULL,
+    date date  NOT NULL,
     TYPE_TRAINING_typeTrainingId Serial  NOT NULL,
     USERS_userId Serial  NOT NULL,
     CONSTRAINT DAILY_TRAINING_pk PRIMARY KEY (dailyId)

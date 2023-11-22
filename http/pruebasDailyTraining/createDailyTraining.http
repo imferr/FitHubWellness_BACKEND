@@ -3,6 +3,6 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "typeTrainingId": 1,
     "userId": 1,
+    "typeTrainingId": 2
 }

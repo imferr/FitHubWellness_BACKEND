@@ -35,7 +35,7 @@ public class DailyTrainingBL {
 
     public DailyTrainingDTO createDailyTraining(int userId, int typeTrainingId) {
         DailyTrainingEntity entity = new DailyTrainingEntity();
-        entity.setDate(new java.sql.Timestamp(System.currentTimeMillis()));
+        entity.setDate(new java.sql.Date(System.currentTimeMillis()));
 
         Optional<TypeTrainingEntity> typeTrainingEntity = typeTrainingDAO.findById(typeTrainingId);
         entity.setTypeTrainingId(typeTrainingEntity.get());
@@ -62,7 +62,7 @@ public class DailyTrainingBL {
     }
 
     public List<Map<String, Object>> findAllDailyTrainingByUserId(int userId) {
-        List<DailyTrainingEntity> trainingEntities = dailyTrainingDAO.findAllByUserId(userId);
+        List<DailyTrainingEntity> trainingEntities = dailyTrainingDAO.findByUserIdUserId(userId);
         List<Map<String, Object>> resultList = new ArrayList<>();
 
         for (DailyTrainingEntity entity : trainingEntities) {

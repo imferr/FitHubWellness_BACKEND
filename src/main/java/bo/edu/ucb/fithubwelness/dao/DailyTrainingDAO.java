@@ -6,5 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import bo.edu.ucb.fithubwelness.entity.DailyTrainingEntity;
 
 public interface DailyTrainingDAO extends JpaRepository<DailyTrainingEntity, Integer> {
-    List<DailyTrainingEntity> findAllByUserId(int userId);
+    List<DailyTrainingEntity> findByUserIdUserId(int userId);
 }
+
+

@@ -1,18 +1,18 @@
 package bo.edu.ucb.fithubwelness.dto;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public class DailyTrainingDTO {
 
     private int dailyTrainingId;
-    private Timestamp date;
+    private Date date;
     private TypeTrainingDTO typeTraining;
     private UserDTO userId;
 
     public DailyTrainingDTO() {
     }
 
-    public DailyTrainingDTO(int dailyTrainingId, Timestamp date, TypeTrainingDTO typeTraining, UserDTO userId) {
+    public DailyTrainingDTO(int dailyTrainingId, Date date, TypeTrainingDTO typeTraining, UserDTO userId) {
         this.dailyTrainingId = dailyTrainingId;
         this.date = date;
         this.typeTraining = typeTraining;
@@ -25,7 +25,7 @@ public class DailyTrainingDTO {
         return dailyTrainingId;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -43,7 +43,7 @@ public class DailyTrainingDTO {
         this.dailyTrainingId = dailyTrainingId;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
