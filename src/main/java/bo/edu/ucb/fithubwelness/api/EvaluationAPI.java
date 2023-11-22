@@ -35,7 +35,7 @@ public class EvaluationAPI {
             LOGGER.info("La evaluación fue creada con éxito");
             return ResponseEntity.ok(createdEvaluation);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al crear la evaluación");
+            LOGGER.info("Ocurrió un error al crear la evaluación" + e.getMessage());
             return ResponseEntity.internalServerError().build();
         } finally {
             LOGGER.info("Finalizando el proceso de creación de una evaluación");

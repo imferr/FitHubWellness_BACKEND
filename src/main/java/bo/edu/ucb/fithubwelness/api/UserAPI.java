@@ -3,6 +3,7 @@ package bo.edu.ucb.fithubwelness.api;
 import bo.edu.ucb.fithubwelness.bl.UserBL;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
+import bo.edu.ucb.fithubwelness.entity.UserEntity;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -65,4 +66,21 @@ public class UserAPI {
         }
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int userId) {
+        LOGGER.info("Obteniendo detalles del usuario por ID: " + userId);
+        try {
+            UserEntity userEntity = userBL.findUserById(userId);
+            UserDTO userDTO = new UserDTO(
+                    userEntity.getUserId(),
+                    userEntity.getName(),
+                    userEntity.getEmail(),
+                    userEntity.getBirthday());
+            LOGGER.info("Detalles del usuario obtenidos con éxito");
+            return ResponseEntity.ok(userDTO);
+        } catch (Exception e) {
+            LOGGER.info("Error al obtener detalles del usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }
