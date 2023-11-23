@@ -27,16 +27,8 @@ public class TypeTrainingBL {
     }
 
     private void insertInitialData() {
-        TypeTrainingDAO.save(new TypeTrainingEntity(1, "Biceps"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(2, "Triceps"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(3, "Hombros"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(4, "Pecho"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(5, "Espalda"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(6, "Cuadriceps"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(7, "Femorales"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(8, "Glúteos"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(9, "Gemelos"));
-        TypeTrainingDAO.save(new TypeTrainingEntity(10, "Abdomen"));
+        TypeTrainingDAO.save(new TypeTrainingEntity(1, "Tren Superior"));
+        TypeTrainingDAO.save(new TypeTrainingEntity(2, "Tren Inferior"));
     }
 
     public List<TypeTrainingEntity> getAllTypeTraining() {
