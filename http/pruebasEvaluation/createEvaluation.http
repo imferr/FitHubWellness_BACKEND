@@ -5,5 +5,8 @@ Accept: application/json
 {
     "weight": 70.5,
     "height": 175,
-    "userId": 1
+    "userId": 2
 }
+
+
+

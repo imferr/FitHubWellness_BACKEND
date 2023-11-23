@@ -3,12 +3,16 @@ package bo.edu.ucb.fithubwelness.api;
 import bo.edu.ucb.fithubwelness.bl.EvaluationBL;
 import bo.edu.ucb.fithubwelness.bl.UserBL;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
+import bo.edu.ucb.fithubwelness.dto.UserDTO;
+
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RestController
@@ -27,16 +31,29 @@ public class EvaluationAPI {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO) {
+    public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody Map<String, Object> requestBody) {
         LOGGER.info("Iniciando el proceso de creación de una evaluación");
+
         try {
-            UserEntity user = userBL.findUserById(evaluationDTO.getUserId().getUserId());
+            Double weight = (Double) requestBody.get("weight");
+            Integer height = (Integer) requestBody.get("height");
+            Integer userId = ((Integer) requestBody.get("userId"));
+
+            UserEntity user = userBL.findUserById(userId);
+            UserDTO userDto = new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getBirthday());
+
+            EvaluationDTO evaluationDTO = new EvaluationDTO();
+            evaluationDTO.setWeight(weight);
+            evaluationDTO.setHeight(height);
+            evaluationDTO.setUserId(userDto);
+
             EvaluationDTO createdEvaluation = evaluationBL.createEvaluation(evaluationDTO, user);
+
             LOGGER.info("La evaluación fue creada con éxito");
             return ResponseEntity.ok(createdEvaluation);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al crear la evaluación" + e.getMessage());
-            return ResponseEntity.internalServerError().build();
+            LOGGER.info("Ocurrió un error al crear la evaluación: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } finally {
             LOGGER.info("Finalizando el proceso de creación de una evaluación");
         }
