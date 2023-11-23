@@ -176,3 +176,27 @@ ALTER TABLE PERSONAL_RECORD ADD CONSTRAINT PERSONAL_RECORD_GOAL
 ;
 
 -- End of file.
+
+
+
+
+
+
+
+
+
+--TABLA HISTORICA EVALUATION
+
+CREATE TABLE EVALUATION_HISTORY (
+    evaluationId Serial  NOT NULL,
+    weight numeric(10,5)  NOT NULL,
+    height int  NOT NULL,
+    date date  NOT NULL,
+    imc numeric(10,5)  NOT NULL,
+    estado varchar(30)  NOT NULL,
+    USERS_userId Serial  NOT NULL,
+    valid_from TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    valid_to TIMESTAMP NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT EVALUATION_HISTORY_pk PRIMARY KEY (evaluationId, valid_from)
+);
