@@ -1,26 +1,31 @@
 package bo.edu.ucb.fithubwelness.bl;
 
 import bo.edu.ucb.fithubwelness.dao.EvaluationDAO;
+import bo.edu.ucb.fithubwelness.dao.EvaluationHistoryDAO;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.entity.EvaluationEntity;
+import bo.edu.ucb.fithubwelness.entity.EvaluationHistoryEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
 
 @Service
 public class EvaluationBL {
 
     private final EvaluationDAO evaluationDAO;
+    private final EvaluationHistoryDAO evaluationHistoryDAO;
 
     @Autowired
-    public EvaluationBL(EvaluationDAO evaluationDAO) {
+    public EvaluationBL(EvaluationDAO evaluationDAO, EvaluationHistoryDAO evaluationHistoryDAO) {
         this.evaluationDAO = evaluationDAO;
+        this.evaluationHistoryDAO = evaluationHistoryDAO;
     }
 
     public EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO, UserEntity user) {
+        if (evaluationDAO.findByUserId(user) != null) {
+            throw new RuntimeException("Ya existe una evaluación para este usuario. Por favor, actualiza la evaluación existente.");
+        }
         EvaluationEntity entity = new EvaluationEntity();
         entity.setWeight(evaluationDTO.getWeight());
         entity.setHeight(evaluationDTO.getHeight());
@@ -28,21 +33,34 @@ public class EvaluationBL {
         entity.setImc(calculateIMC(evaluationDTO.getWeight(), evaluationDTO.getHeight()));
         entity.setState(determineState(entity.getImc()));
         entity.setUserId(user);
-
         entity = evaluationDAO.save(entity);
+        EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
+        historyEntity.setEvaluationId(entity.getEvaluationId());
+        historyEntity.setWeight(entity.getWeight());
+        historyEntity.setHeight(entity.getHeight());
+        historyEntity.setDate(entity.getDate());
+        historyEntity.setImc(entity.getImc());
+        historyEntity.setState(entity.getState());
+        historyEntity.setUserId(entity.getUserId());
+        historyEntity.setValidFrom(new Timestamp(System.currentTimeMillis()));
+        historyEntity.setValidTo(null);
+        historyEntity.setActive(true);
+        evaluationHistoryDAO.save(historyEntity);
         return convertToDTO(entity);
     }
 
-    public List<EvaluationDTO> getLast10Evaluations(UserEntity user) {
-        return evaluationDAO.findTop10ByUserIdOrderByDateDesc(user).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    public List<EvaluationDTO> getAllEvaluations(UserEntity user) {
-        return evaluationDAO.findAllByUserId(user).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public EvaluationDTO updateEvaluation(EvaluationDTO evaluationDTO, UserEntity user) {
+        EvaluationEntity existingEvaluation = evaluationDAO.findByUserId(user);
+        if (existingEvaluation == null) {
+            throw new RuntimeException("No se encontró una evaluación para actualizar.");
+        }
+        existingEvaluation.setWeight(evaluationDTO.getWeight());
+        existingEvaluation.setHeight(evaluationDTO.getHeight());
+        existingEvaluation.setImc(calculateIMC(evaluationDTO.getWeight(), evaluationDTO.getHeight()));
+        existingEvaluation.setState(determineState(existingEvaluation.getImc()));
+        evaluationDAO.save(existingEvaluation);
+        updateEvaluationHistory(existingEvaluation);
+        return convertToDTO(existingEvaluation);
     }
 
     private double calculateIMC(double weight, int height) {
@@ -66,5 +84,20 @@ public class EvaluationBL {
                 entity.getState(),
                 null
         );
+    }
+
+    private void updateEvaluationHistory(EvaluationEntity evaluationEntity) {
+        EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
+        historyEntity.setEvaluationId(evaluationEntity.getEvaluationId());
+        historyEntity.setWeight(evaluationEntity.getWeight());
+        historyEntity.setHeight(evaluationEntity.getHeight());
+        historyEntity.setDate(evaluationEntity.getDate());
+        historyEntity.setImc(evaluationEntity.getImc());
+        historyEntity.setState(evaluationEntity.getState());
+        historyEntity.setUserId(evaluationEntity.getUserId());
+        historyEntity.setValidFrom(new Timestamp(System.currentTimeMillis()));
+        historyEntity.setValidTo(null);
+        historyEntity.setActive(true);
+        evaluationHistoryDAO.save(historyEntity);
     }
 }
