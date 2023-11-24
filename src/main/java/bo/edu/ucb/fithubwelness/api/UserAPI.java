@@ -4,6 +4,7 @@ import bo.edu.ucb.fithubwelness.bl.UserBL;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -50,20 +51,32 @@ public class UserAPI {
     }
 
     @PostMapping("/createWithEvaluation")
-    public ResponseEntity<UserDTO> createUserWithEvaluation(@RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<UserDTO> createUserWithEvaluation(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
         LOGGER.info("Iniciando el proceso de creación de usuario con evaluación");
         try {
             UserDTO userDTO = objectMapper.convertValue(requestData.get("user"), UserDTO.class);
             EvaluationDTO evaluationDTO = objectMapper.convertValue(requestData.get("evaluation"), EvaluationDTO.class);
-            UserDTO createdUser = userBL.createUserWithEvaluation(userDTO, evaluationDTO);
+            String clientIp = getClientIp(request);
+            UserDTO createdUser = userBL.createUserWithEvaluation(userDTO, evaluationDTO, clientIp);
             LOGGER.info("Usuario creado exitosamente");
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al crear el usuario" + e.getMessage());
+            LOGGER.info("Ocurrió un error al crear el usuario");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } finally {
             LOGGER.info("Finalizando el proceso de creación de usuario con evaluación");
         }
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String remoteAddr = "";
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+        return remoteAddr;
     }
 
     @GetMapping("/{userId}")

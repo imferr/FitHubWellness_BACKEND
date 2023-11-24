@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "evaluation_history")
 public class EvaluationHistoryEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluationid")
@@ -32,19 +32,20 @@ public class EvaluationHistoryEntity {
     @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
     private UserEntity userId;
 
-    @Column(name = "valid_from", nullable = false)
-    private Timestamp validFrom;
+    @Column(name = "aud_date", nullable = false)
+    private Timestamp audDate;
 
-    @Column(name = "valid_to")
-    private Timestamp validTo;
+    @Column(name = "aud_host", nullable = false, length = 100)
+    private String audHost;
 
-    @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    @Column(name = "aud_user")
+    private Integer audUser;
 
     public EvaluationHistoryEntity() {
     }
 
-    public EvaluationHistoryEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc, String state, UserEntity userId, Timestamp validFrom, Timestamp validTo, Boolean isActive) {
+    public EvaluationHistoryEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc,
+            String state, UserEntity userId, Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
@@ -52,14 +53,14 @@ public class EvaluationHistoryEntity {
         this.imc = imc;
         this.state = state;
         this.userId = userId;
-        this.validFrom = validFrom;
-        this.validTo = validTo;
-        this.isActive = isActive;
+        this.audDate = audDate;
+        this.audHost = audHost;
+        this.audUser = audUser;
     }
 
-    //getters:
+    // getters:
 
-    public int getEvaluationId() {
+    public Integer getEvaluationId() {
         return evaluationId;
     }
 
@@ -87,21 +88,21 @@ public class EvaluationHistoryEntity {
         return userId;
     }
 
-    public Timestamp getValidFrom() {
-        return validFrom;
+    public Timestamp getAudDate() {
+        return audDate;
     }
 
-    public Timestamp getValidTo() {
-        return validTo;
+    public String getAudHost() {
+        return audHost;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public Integer getAudUser() {
+        return audUser;
     }
 
-    //setters:
+    // setters:
 
-    public void setEvaluationId(int evaluationId) {
+    public void setEvaluationId(Integer evaluationId) {
         this.evaluationId = evaluationId;
     }
 
@@ -129,33 +130,32 @@ public class EvaluationHistoryEntity {
         this.userId = userId;
     }
 
-    public void setValidFrom(Timestamp validFrom) {
-        this.validFrom = validFrom;
+    public void setAudDate(Timestamp audDate) {
+        this.audDate = audDate;
     }
 
-    public void setValidTo(Timestamp validTo) {
-        this.validTo = validTo;
+    public void setAudHost(String audHost) {
+        this.audHost = audHost;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setAudUser(Integer audUser) {
+        this.audUser = audUser;
     }
-
-    //toString:
 
     @Override
     public String toString() {
-        return "EvaluationHistoryEntity{" + 
-                "evaluationId=" + evaluationId + 
-                ", weight=" + weight + 
-                ", height=" + height + 
-                ", date='" + date + '\'' + 
-                ", imc=" + imc + 
-                ", state='" + state + '\'' + 
-                ", userId=" + userId + 
-                ", validFrom=" + validFrom + 
-                ", validTo=" + validTo + 
-                ", isActive=" + isActive + 
+        return "EvaluationHistoryEntity{" +
+                "evaluationId=" + evaluationId +
+                ", weight=" + weight +
+                ", height=" + height +
+                ", date=" + date +
+                ", imc=" + imc +
+                ", state='" + state + '\'' +
+                ", userId=" + userId +
+                ", audDate=" + audDate +
+                ", audHost='" + audHost + '\'' +
+                ", audUser='" + audUser + '\'' +
                 '}';
     }
+
 }

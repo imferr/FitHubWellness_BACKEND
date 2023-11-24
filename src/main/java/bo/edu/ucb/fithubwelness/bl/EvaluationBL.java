@@ -22,9 +22,10 @@ public class EvaluationBL {
         this.evaluationHistoryDAO = evaluationHistoryDAO;
     }
 
-    public EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO, UserEntity user) {
+    public EvaluationDTO createEvaluation(EvaluationDTO evaluationDTO, UserEntity user, String host) {
         if (evaluationDAO.findByUserId(user) != null) {
-            throw new RuntimeException("Ya existe una evaluación para este usuario. Por favor, actualiza la evaluación existente.");
+            throw new RuntimeException(
+                    "Ya existe una evaluación para este usuario. Por favor, actualiza la evaluación existente.");
         }
         EvaluationEntity entity = new EvaluationEntity();
         entity.setWeight(evaluationDTO.getWeight());
@@ -34,22 +35,11 @@ public class EvaluationBL {
         entity.setState(determineState(entity.getImc()));
         entity.setUserId(user);
         entity = evaluationDAO.save(entity);
-        EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
-        historyEntity.setEvaluationId(entity.getEvaluationId());
-        historyEntity.setWeight(entity.getWeight());
-        historyEntity.setHeight(entity.getHeight());
-        historyEntity.setDate(entity.getDate());
-        historyEntity.setImc(entity.getImc());
-        historyEntity.setState(entity.getState());
-        historyEntity.setUserId(entity.getUserId());
-        historyEntity.setValidFrom(new Timestamp(System.currentTimeMillis()));
-        historyEntity.setValidTo(null);
-        historyEntity.setActive(true);
-        evaluationHistoryDAO.save(historyEntity);
+        updateEvaluationHistory(entity, host, user.getUserId());
         return convertToDTO(entity);
     }
 
-    public EvaluationDTO updateEvaluation(EvaluationDTO evaluationDTO, UserEntity user) {
+    public EvaluationDTO updateEvaluation(EvaluationDTO evaluationDTO, UserEntity user, String host) {
         EvaluationEntity existingEvaluation = evaluationDAO.findByUserId(user);
         if (existingEvaluation == null) {
             throw new RuntimeException("No se encontró una evaluación para actualizar.");
@@ -59,7 +49,7 @@ public class EvaluationBL {
         existingEvaluation.setImc(calculateIMC(evaluationDTO.getWeight(), evaluationDTO.getHeight()));
         existingEvaluation.setState(determineState(existingEvaluation.getImc()));
         evaluationDAO.save(existingEvaluation);
-        updateEvaluationHistory(existingEvaluation);
+        updateEvaluationHistory(existingEvaluation, host, user.getUserId());
         return convertToDTO(existingEvaluation);
     }
 
@@ -68,10 +58,14 @@ public class EvaluationBL {
     }
 
     private String determineState(double imc) {
-        if (imc < 18.5) return "Bajo peso";
-        else if (imc <= 24.9) return "Ideal";
-        else if (imc <= 29.9) return "Sobrepeso";
-        else return "Obesidad";
+        if (imc < 18.5)
+            return "Bajo peso";
+        else if (imc <= 24.9)
+            return "Ideal";
+        else if (imc <= 29.9)
+            return "Sobrepeso";
+        else
+            return "Obesidad";
     }
 
     private EvaluationDTO convertToDTO(EvaluationEntity entity) {
@@ -82,22 +76,21 @@ public class EvaluationBL {
                 entity.getDate(),
                 entity.getImc(),
                 entity.getState(),
-                null
-        );
+                null);
     }
 
-    private void updateEvaluationHistory(EvaluationEntity evaluationEntity) {
+    private void updateEvaluationHistory(EvaluationEntity evaluationEntity, String host, Integer userId) {
         EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
-        historyEntity.setEvaluationId(evaluationEntity.getEvaluationId());
+        //historyEntity.setEvaluationId(evaluationEntity.getEvaluationId());
         historyEntity.setWeight(evaluationEntity.getWeight());
         historyEntity.setHeight(evaluationEntity.getHeight());
         historyEntity.setDate(evaluationEntity.getDate());
         historyEntity.setImc(evaluationEntity.getImc());
         historyEntity.setState(evaluationEntity.getState());
         historyEntity.setUserId(evaluationEntity.getUserId());
-        historyEntity.setValidFrom(new Timestamp(System.currentTimeMillis()));
-        historyEntity.setValidTo(null);
-        historyEntity.setActive(true);
+        historyEntity.setAudDate(new Timestamp(System.currentTimeMillis()));
+        historyEntity.setAudHost(host);
+        historyEntity.setAudUser(userId);
         evaluationHistoryDAO.save(historyEntity);
     }
 }

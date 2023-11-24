@@ -4,6 +4,8 @@ import bo.edu.ucb.fithubwelness.bl.EvaluationBL;
 import bo.edu.ucb.fithubwelness.bl.UserBL;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,12 @@ public class EvaluationAPI {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO) {
+    public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO,
+            HttpServletRequest request) {
         try {
+            String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(evaluationDTO.getUserId().getUserId());
-            EvaluationDTO createdEvaluation = evaluationBL.createEvaluation(evaluationDTO, user);
+            EvaluationDTO createdEvaluation = evaluationBL.createEvaluation(evaluationDTO, user, clientIp);
             return ResponseEntity.ok(createdEvaluation);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -35,13 +39,26 @@ public class EvaluationAPI {
     }
 
     @PutMapping("/update/{userId}")
-    public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable int userId, @RequestBody EvaluationDTO evaluationDTO) {
+    public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable int userId,
+            @RequestBody EvaluationDTO evaluationDTO, HttpServletRequest request) {
         try {
+            String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(userId);
-            EvaluationDTO updatedEvaluation = evaluationBL.updateEvaluation(evaluationDTO, user);
+            EvaluationDTO updatedEvaluation = evaluationBL.updateEvaluation(evaluationDTO, user, clientIp);
             return ResponseEntity.ok(updatedEvaluation);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String remoteAddr = "";
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+        return remoteAddr;
     }
 }

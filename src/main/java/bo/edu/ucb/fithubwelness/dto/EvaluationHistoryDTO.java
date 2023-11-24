@@ -12,15 +12,15 @@ public class EvaluationHistoryDTO {
     private Double imc;
     private String state;
     private UserDTO userId;
-    private Timestamp validFrom;
-    private Timestamp validTo;
-    private Boolean isActive;
+    private Timestamp audDate;
+    private String audHost;
+    private Integer audUser;
 
     public EvaluationHistoryDTO() {
     }
 
     public EvaluationHistoryDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state,
-            UserDTO userId, Timestamp validFrom, Timestamp validTo, Boolean isActive) {
+            UserDTO userId, Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
@@ -28,9 +28,9 @@ public class EvaluationHistoryDTO {
         this.imc = imc;
         this.state = state;
         this.userId = userId;
-        this.validFrom = validFrom;
-        this.validTo = validTo;
-        this.isActive = isActive;
+        this.audDate = audDate;
+        this.audHost = audHost;
+        this.audUser = audUser;
     }
 
     // getters:
@@ -63,16 +63,16 @@ public class EvaluationHistoryDTO {
         return userId;
     }
 
-    public Timestamp getValidFrom() {
-        return validFrom;
+    public Timestamp getAudDate() {
+        return audDate;
     }
 
-    public Timestamp getValidTo() {
-        return validTo;
+    public String getAudHost() {
+        return audHost;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public Integer getAudUser() {
+        return audUser;
     }
 
     // setters:
@@ -105,16 +105,16 @@ public class EvaluationHistoryDTO {
         this.userId = userId;
     }
 
-    public void setValidFrom(Timestamp validFrom) {
-        this.validFrom = validFrom;
+    public void setAudDate(Timestamp audDate) {
+        this.audDate = audDate;
     }
 
-    public void setValidTo(Timestamp validTo) {
-        this.validTo = validTo;
+    public void setAudHost(String audHost) {
+        this.audHost = audHost;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setAudUser(Integer audUser) {
+        this.audUser = audUser;
     }
 
     // toString:
@@ -129,9 +129,9 @@ public class EvaluationHistoryDTO {
                 ", imc=" + imc +
                 ", state='" + state + '\'' +
                 ", userId=" + userId +
-                ", validFrom=" + validFrom +
-                ", validTo=" + validTo +
-                ", isActive=" + isActive +
+                ", audDate=" + audDate +
+                ", audHost='" + audHost + '\'' +
+                ", audUser='" + audUser + '\'' +
                 '}';
     }
 }

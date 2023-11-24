@@ -52,7 +52,7 @@ public class UserBL {
         return existingUser.isPresent();
     }
 
-    public UserDTO createUserWithEvaluation(UserDTO userDTO, EvaluationDTO evaluationDTO) {
+    public UserDTO createUserWithEvaluation(UserDTO userDTO, EvaluationDTO evaluationDTO, String host) {
         UserEntity userEntity = new UserEntity();
         userEntity.setName(userDTO.getName());
         userEntity.setEmail(userDTO.getEmail());
@@ -61,7 +61,7 @@ public class UserBL {
         userEntity = userDAO.save(userEntity);
 
         evaluationDTO.setUserId(new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday()));
-        evaluationBL.createEvaluation(evaluationDTO, userEntity);
+        evaluationBL.createEvaluation(evaluationDTO, userEntity, host);
 
         return new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday());
     }

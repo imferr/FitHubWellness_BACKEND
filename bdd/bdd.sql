@@ -195,8 +195,9 @@ CREATE TABLE EVALUATION_HISTORY (
     imc numeric(10,5)  NOT NULL,
     estado varchar(30)  NOT NULL,
     USERS_userId Serial  NOT NULL,
-    valid_from TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    valid_to TIMESTAMP NULL,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    CONSTRAINT EVALUATION_HISTORY_pk PRIMARY KEY (evaluationId, valid_from)
+    aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    aud_host varchar(100),
+    aud_user integer NOT NULL,
+    CONSTRAINT EVALUATION_HISTORY_pk PRIMARY KEY (evaluationId, aud_date)
 );
+
