@@ -6,6 +6,8 @@ import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ public class EvaluationAPI {
 
     private final EvaluationBL evaluationBL;
     private final UserBL userBL;
+    private static final Logger LOGGER = Logger.getLogger(EvaluationAPI.class.getName());
 
     @Autowired
     public EvaluationAPI(EvaluationBL evaluationBL, UserBL userBL) {
@@ -28,12 +31,15 @@ public class EvaluationAPI {
     @PostMapping("/create")
     public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO,
             HttpServletRequest request) {
+        LOGGER.info("Inicio de creación de evaluación");
         try {
             String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(evaluationDTO.getUserId().getUserId());
             EvaluationDTO createdEvaluation = evaluationBL.createEvaluation(evaluationDTO, user, clientIp);
+            LOGGER.info("Se creó la evaluación exitosamente");
             return ResponseEntity.ok(createdEvaluation);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
+            LOGGER.info("Ocurrió un error al crear la evaluación");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -41,13 +47,18 @@ public class EvaluationAPI {
     @PutMapping("/update/{userId}")
     public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable int userId,
             @RequestBody EvaluationDTO evaluationDTO, HttpServletRequest request) {
+        LOGGER.info("Inicio de actualización de evaluación");
         try {
             String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(userId);
             EvaluationDTO updatedEvaluation = evaluationBL.updateEvaluation(evaluationDTO, user, clientIp);
+            LOGGER.info("Se actualizó la evaluación exitosamente");
             return ResponseEntity.ok(updatedEvaluation);
         } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al actualizar la evaluación");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } finally {
+            LOGGER.info("Fin de actualización de evaluación");
         }
     }
 
