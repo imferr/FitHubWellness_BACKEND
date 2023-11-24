@@ -14,7 +14,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
 
-# Configuración para la API de wger
-wger:
-  username: imferrr
-  password: mfgs2003
+# Configuración para la API de Exercisedb
+exercisedb:
+  api-key: a7a76cf85cmsh655ed18dbcb2a2dp1c56bfjsn8abedd3c1d3a
+

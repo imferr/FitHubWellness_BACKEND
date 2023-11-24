@@ -3,7 +3,7 @@ package bo.edu.ucb.fithubwelness.bl;
 //import bo.edu.ucb.fithubwelness.dao.ExerciseDAO;
 import bo.edu.ucb.fithubwelness.dto.ExerciseDTO;
 //import bo.edu.ucb.fithubwelness.entity.ExerciseEntity;
-import bo.edu.ucb.fithubwelness.service.WgerService;
+import bo.edu.ucb.fithubwelness.service.ExerciseDbService;
 //import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,12 +12,12 @@ import java.util.List;
 @Service
 public class ExerciseBL {
 
-    private final WgerService wgerService;
+    private final ExerciseDbService exerciseDbService;
     //private ExerciseDAO exerciseDAO;
 
     @Autowired
-    public ExerciseBL(WgerService wgerService /*ExerciseDAO exerciseDAO*/) {
-        this.wgerService = wgerService;
+    public ExerciseBL(ExerciseDbService exerciseDbService /*ExerciseDAO exerciseDAO*/) {
+        this.exerciseDbService = exerciseDbService;
         //this.exerciseDAO = exerciseDAO;
     }
 /*
@@ -41,6 +41,6 @@ public class ExerciseBL {
     }
 */
     public List<ExerciseDTO> findAllExercises() {
-        return wgerService.getAllExercises();
+        return exerciseDbService.getAllExercises();
     }
 }

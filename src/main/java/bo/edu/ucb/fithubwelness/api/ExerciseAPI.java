@@ -27,9 +27,10 @@ public class ExerciseAPI {
         LOGGER.info("Iniciando el proceso de obtener todos los ejercicios");
         try {
             List<ExerciseDTO> exercises = exerciseBL.findAllExercises();
+            LOGGER.info("Ejercicios obtenidos con éxito");
             return ResponseEntity.ok(exercises);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al obtener los ejercicios");
+            LOGGER.info("Ocurrió un error al obtener los ejercicios" + e.getMessage() + e.getCause() + e.getClass());
             return ResponseEntity.badRequest().build();
         } finally {
             LOGGER.info("Finalizando el proceso de obtener todos los ejercicios");
