@@ -40,6 +40,7 @@ public class ExerciseDbService {
             List<Map<String, Object>> results = (List<Map<String, Object>>) response.getBody();
             for (Map<String, Object> item : results) {
                 ExerciseDTO exercise = new ExerciseDTO();
+                exercise.setbodyPart((String) item.get("bodyPart"));
                 exercise.setName((String) item.get("name"));
                 exercise.setLinkPicture((String) item.get("gifUrl"));
 
