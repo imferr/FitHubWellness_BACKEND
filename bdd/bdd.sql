@@ -23,7 +23,7 @@ CREATE TABLE CHATGPT_RESPONSE (
 -- Table: DAILY_TRAINING
 CREATE TABLE DAILY_TRAINING (
     dailyId Serial  NOT NULL,
-    date timestamp  NOT NULL,
+    date date  NOT NULL,
     TYPE_TRAINING_typeTrainingId Serial  NOT NULL,
     USERS_userId Serial  NOT NULL,
     CONSTRAINT DAILY_TRAINING_pk PRIMARY KEY (dailyId)
@@ -90,7 +90,7 @@ CREATE TABLE USERS (
     userId Serial  NOT NULL,
     name varchar(100)  NOT NULL,
     email varchar(100)  NOT NULL,
-    birthday date ,
+    birthday date  NOT NULL,
     CONSTRAINT USERS_pk PRIMARY KEY (userId)
 );
 
@@ -176,3 +176,28 @@ ALTER TABLE PERSONAL_RECORD ADD CONSTRAINT PERSONAL_RECORD_GOAL
 ;
 
 -- End of file.
+
+
+
+
+
+
+
+
+
+--TABLA HISTORICA EVALUATION
+
+CREATE TABLE EVALUATION_HISTORY (
+    evaluationId Serial  NOT NULL,
+    weight numeric(10,5)  NOT NULL,
+    height int  NOT NULL,
+    date date  NOT NULL,
+    imc numeric(10,5)  NOT NULL,
+    estado varchar(30)  NOT NULL,
+    USERS_userId Serial  NOT NULL,
+    aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    aud_host varchar(100),
+    aud_user integer NOT NULL,
+    CONSTRAINT EVALUATION_HISTORY_pk PRIMARY KEY (evaluationId, aud_date)
+);
+

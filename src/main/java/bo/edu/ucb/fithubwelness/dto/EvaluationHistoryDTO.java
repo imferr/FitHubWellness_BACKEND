@@ -1,9 +1,10 @@
 package bo.edu.ucb.fithubwelness.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
-public class EvaluationDTO {
-    
+public class EvaluationHistoryDTO {
+
     private int evaluationId;
     private Double weight;
     private int height;
@@ -11,11 +12,15 @@ public class EvaluationDTO {
     private Double imc;
     private String state;
     private UserDTO userId;
+    private Timestamp audDate;
+    private String audHost;
+    private Integer audUser;
 
-    public EvaluationDTO() {
+    public EvaluationHistoryDTO() {
     }
 
-    public EvaluationDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state, UserDTO userId) {
+    public EvaluationHistoryDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state,
+            UserDTO userId, Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
@@ -23,9 +28,12 @@ public class EvaluationDTO {
         this.imc = imc;
         this.state = state;
         this.userId = userId;
+        this.audDate = audDate;
+        this.audHost = audHost;
+        this.audUser = audUser;
     }
 
-    //getters:
+    // getters:
 
     public int getEvaluationId() {
         return evaluationId;
@@ -55,7 +63,19 @@ public class EvaluationDTO {
         return userId;
     }
 
-    //setters:
+    public Timestamp getAudDate() {
+        return audDate;
+    }
+
+    public String getAudHost() {
+        return audHost;
+    }
+
+    public Integer getAudUser() {
+        return audUser;
+    }
+
+    // setters:
 
     public void setEvaluationId(int evaluationId) {
         this.evaluationId = evaluationId;
@@ -85,11 +105,23 @@ public class EvaluationDTO {
         this.userId = userId;
     }
 
-    //toString:
+    public void setAudDate(Timestamp audDate) {
+        this.audDate = audDate;
+    }
+
+    public void setAudHost(String audHost) {
+        this.audHost = audHost;
+    }
+
+    public void setAudUser(Integer audUser) {
+        this.audUser = audUser;
+    }
+
+    // toString:
 
     @Override
     public String toString() {
-        return "EvaluationDTO{" +
+        return "EvaluationHistoryDTO{" +
                 "evaluationId=" + evaluationId +
                 ", weight=" + weight +
                 ", height=" + height +
@@ -97,6 +129,9 @@ public class EvaluationDTO {
                 ", imc=" + imc +
                 ", state='" + state + '\'' +
                 ", userId=" + userId +
+                ", audDate=" + audDate +
+                ", audHost='" + audHost + '\'' +
+                ", audUser='" + audUser + '\'' +
                 '}';
     }
 }

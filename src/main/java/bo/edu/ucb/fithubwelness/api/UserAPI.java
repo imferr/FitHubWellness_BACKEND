@@ -1,10 +1,19 @@
 package bo.edu.ucb.fithubwelness.api;
 
 import bo.edu.ucb.fithubwelness.bl.UserBL;
+import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
+import bo.edu.ucb.fithubwelness.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -12,26 +21,79 @@ import org.springframework.web.bind.annotation.*;
 public class UserAPI {
 
     private final UserBL userBL;
+    private static final Logger LOGGER = Logger.getLogger(UserAPI.class.getName());
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public UserAPI(UserBL userBL) {
+    public UserAPI(UserBL userBL, ObjectMapper objectMapper) {
         this.userBL = userBL;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/findOrCreate")
     public ResponseEntity<UserDTO> findOrCreateUser(@RequestBody UserDTO userDTO) {
-        UserDTO user = userBL.findOrCreateUser(userDTO);
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
-        UserDTO user = userBL.getUserById(id);
-        if (user != null) {
+        LOGGER.info("Iniciando el proceso de creación de usuario");
+        try {
+            boolean emailExists = userBL.emailExists(userDTO.getEmail());
+            if (!emailExists) {
+                LOGGER.info("Correo no encontrado en la base de datos. Redirigiendo a la página de first evaluation.");
+                return ResponseEntity.status(HttpStatus.FOUND).header("Location", "/firstevaluation").build();
+            }
+            UserDTO user = userBL.findOrCreateUser(userDTO);
+            LOGGER.info("Usuario creado exitosamente");
             return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al crear el usuario");
+            return ResponseEntity.badRequest().build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de creación de usuario");
         }
     }
 
+    @PostMapping("/createWithEvaluation")
+    public ResponseEntity<UserDTO> createUserWithEvaluation(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
+        LOGGER.info("Iniciando el proceso de creación de usuario con evaluación");
+        try {
+            UserDTO userDTO = objectMapper.convertValue(requestData.get("user"), UserDTO.class);
+            EvaluationDTO evaluationDTO = objectMapper.convertValue(requestData.get("evaluation"), EvaluationDTO.class);
+            String clientIp = getClientIp(request);
+            UserDTO createdUser = userBL.createUserWithEvaluation(userDTO, evaluationDTO, clientIp);
+            LOGGER.info("Usuario creado exitosamente");
+            return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al crear el usuario");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } finally {
+            LOGGER.info("Finalizando el proceso de creación de usuario con evaluación");
+        }
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String remoteAddr = "";
+        if (request != null) {
+            remoteAddr = request.getHeader("X-FORWARDED-FOR");
+            if (remoteAddr == null || "".equals(remoteAddr)) {
+                remoteAddr = request.getRemoteAddr();
+            }
+        }
+        return remoteAddr;
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int userId) {
+        LOGGER.info("Obteniendo detalles del usuario por ID: " + userId);
+        try {
+            UserEntity userEntity = userBL.findUserById(userId);
+            UserDTO userDTO = new UserDTO(
+                    userEntity.getUserId(),
+                    userEntity.getName(),
+                    userEntity.getEmail(),
+                    userEntity.getBirthday());
+            LOGGER.info("Detalles del usuario obtenidos con éxito");
+            return ResponseEntity.ok(userDTO);
+        } catch (Exception e) {
+            LOGGER.info("Error al obtener detalles del usuario: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
 }

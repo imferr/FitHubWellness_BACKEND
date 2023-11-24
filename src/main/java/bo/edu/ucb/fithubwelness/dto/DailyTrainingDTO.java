@@ -1,22 +1,22 @@
 package bo.edu.ucb.fithubwelness.dto;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 public class DailyTrainingDTO {
 
     private int dailyTrainingId;
-    private Timestamp date;
+    private Date date;
     private TypeTrainingDTO typeTraining;
-    private UserDTO user;
+    private UserDTO userId;
 
     public DailyTrainingDTO() {
     }
 
-    public DailyTrainingDTO(int dailyTrainingId, Timestamp date, TypeTrainingDTO typeTraining, UserDTO user) {
+    public DailyTrainingDTO(int dailyTrainingId, Date date, TypeTrainingDTO typeTraining, UserDTO userId) {
         this.dailyTrainingId = dailyTrainingId;
         this.date = date;
         this.typeTraining = typeTraining;
-        this.user = user;
+        this.userId = userId;
     }
 
     //getters:
@@ -25,7 +25,7 @@ public class DailyTrainingDTO {
         return dailyTrainingId;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -33,8 +33,8 @@ public class DailyTrainingDTO {
         return typeTraining;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public UserDTO getUserId() {
+        return userId;
     }
 
     //setters:
@@ -43,7 +43,7 @@ public class DailyTrainingDTO {
         this.dailyTrainingId = dailyTrainingId;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -51,8 +51,8 @@ public class DailyTrainingDTO {
         this.typeTraining = typeTraining;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUserId(UserDTO userId) {
+        this.userId = userId;
     }
 
     //toString:
@@ -63,7 +63,7 @@ public class DailyTrainingDTO {
                 "dailyTrainingId=" + dailyTrainingId + 
                 ", date=" + date + 
                 ", typeTraining=" + typeTraining + 
-                ", user=" + user + 
+                ", userId=" + userId + 
                 '}';
     }
 }

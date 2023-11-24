@@ -1,6 +1,6 @@
 package bo.edu.ucb.fithubwelness.entity;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import jakarta.persistence.*;
 
@@ -14,7 +14,7 @@ public class DailyTrainingEntity {
     private Integer dailyTrainingId;
 
     @Column(name = "date", nullable = false)
-    private Timestamp date;
+    private Date date;
 
     @ManyToOne
     @JoinColumn(name = "type_training_typetrainingid", referencedColumnName = "typetrainingid", nullable = false)
@@ -27,7 +27,7 @@ public class DailyTrainingEntity {
     public DailyTrainingEntity() {
     }
 
-    public DailyTrainingEntity(Integer dailyTrainingId, Timestamp date, TypeTrainingEntity typeTrainingId, UserEntity userId) {
+    public DailyTrainingEntity(Integer dailyTrainingId, Date date, TypeTrainingEntity typeTrainingId, UserEntity userId) {
         this.dailyTrainingId = dailyTrainingId;
         this.date = date;
         this.typeTrainingId = typeTrainingId;
@@ -40,7 +40,7 @@ public class DailyTrainingEntity {
         return dailyTrainingId;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -58,7 +58,7 @@ public class DailyTrainingEntity {
         this.dailyTrainingId = dailyTrainingId;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

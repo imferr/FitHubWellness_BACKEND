@@ -1,13 +1,13 @@
 package bo.edu.ucb.fithubwelness.entity;
 
 import java.sql.Date;
-
+import java.sql.Timestamp;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "evaluation")
-public class EvaluationEntity {
-    
+@Table(name = "evaluation_history")
+public class EvaluationHistoryEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "evaluationid")
@@ -32,10 +32,20 @@ public class EvaluationEntity {
     @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
     private UserEntity userId;
 
-    public EvaluationEntity() {
+    @Column(name = "aud_date", nullable = false)
+    private Timestamp audDate;
+
+    @Column(name = "aud_host", nullable = false, length = 100)
+    private String audHost;
+
+    @Column(name = "aud_user")
+    private Integer audUser;
+
+    public EvaluationHistoryEntity() {
     }
 
-    public EvaluationEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc, String state, UserEntity userId) {
+    public EvaluationHistoryEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc,
+            String state, UserEntity userId, Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
@@ -43,11 +53,14 @@ public class EvaluationEntity {
         this.imc = imc;
         this.state = state;
         this.userId = userId;
+        this.audDate = audDate;
+        this.audHost = audHost;
+        this.audUser = audUser;
     }
 
-    //getters:
+    // getters:
 
-    public int getEvaluationId() {
+    public Integer getEvaluationId() {
         return evaluationId;
     }
 
@@ -75,9 +88,21 @@ public class EvaluationEntity {
         return userId;
     }
 
-    //setters:
+    public Timestamp getAudDate() {
+        return audDate;
+    }
 
-    public void setEvaluationId(int evaluationId) {
+    public String getAudHost() {
+        return audHost;
+    }
+
+    public Integer getAudUser() {
+        return audUser;
+    }
+
+    // setters:
+
+    public void setEvaluationId(Integer evaluationId) {
         this.evaluationId = evaluationId;
     }
 
@@ -105,18 +130,32 @@ public class EvaluationEntity {
         this.userId = userId;
     }
 
-    //toString:
+    public void setAudDate(Timestamp audDate) {
+        this.audDate = audDate;
+    }
+
+    public void setAudHost(String audHost) {
+        this.audHost = audHost;
+    }
+
+    public void setAudUser(Integer audUser) {
+        this.audUser = audUser;
+    }
 
     @Override
     public String toString() {
-        return "EvaluationEntity{" + 
-                "evaluationId=" + evaluationId + 
-                ", weight=" + weight + 
-                ", height=" + height + 
-                ", date='" + date + '\'' + 
-                ", imc=" + imc + 
-                ", state='" + state + '\'' + 
-                ", userId=" + userId + 
+        return "EvaluationHistoryEntity{" +
+                "evaluationId=" + evaluationId +
+                ", weight=" + weight +
+                ", height=" + height +
+                ", date=" + date +
+                ", imc=" + imc +
+                ", state='" + state + '\'' +
+                ", userId=" + userId +
+                ", audDate=" + audDate +
+                ", audHost='" + audHost + '\'' +
+                ", audUser='" + audUser + '\'' +
                 '}';
     }
+
 }
