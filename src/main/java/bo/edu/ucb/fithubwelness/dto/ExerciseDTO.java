@@ -3,6 +3,7 @@ package bo.edu.ucb.fithubwelness.dto;
 public class ExerciseDTO {
     
     private int exerciseId;
+    private String bodyPart;
     private String name;
     private String description;
     private String linkPicture;
@@ -10,8 +11,9 @@ public class ExerciseDTO {
     public ExerciseDTO() {
     }
 
-    public ExerciseDTO(int exerciseId, String name, String description, String linkPicture) {
+    public ExerciseDTO(int exerciseId, String bodyPart, String name, String description, String linkPicture) {
         this.exerciseId = exerciseId;
+        this.bodyPart = bodyPart;
         this.name = name;
         this.description = description;
         this.linkPicture = linkPicture;
@@ -21,6 +23,10 @@ public class ExerciseDTO {
 
     public int getExerciseId() {
         return exerciseId;
+    }
+
+    public String getbodyPart() {
+        return bodyPart;
     }
 
     public String getName() {
@@ -41,6 +47,10 @@ public class ExerciseDTO {
         this.exerciseId = exerciseId;
     }
 
+    public void setbodyPart(String bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -59,6 +69,7 @@ public class ExerciseDTO {
     public String toString() {
         return "ExerciseDTO{" +
                 "exerciseId=" + exerciseId + 
+                ", bodyPart=" + bodyPart +
                 ", name=" + name + 
                 ", description=" + description + 
                 ", linkPicture=" + linkPicture + 

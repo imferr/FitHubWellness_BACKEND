@@ -44,6 +44,7 @@ CREATE TABLE EVALUATION (
 -- Table: EXERCISE
 CREATE TABLE EXERCISE (
     exerciseId Serial  NOT NULL,
+    bodypart varchar(100)  NOT NULL,
     name varchar(100)  NOT NULL,
     description varchar(500)  NOT NULL,
     linkPicture varchar(500)  NOT NULL,

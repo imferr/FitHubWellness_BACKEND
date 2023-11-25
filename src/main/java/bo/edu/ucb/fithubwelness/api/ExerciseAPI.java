@@ -23,16 +23,23 @@ public class ExerciseAPI {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ExerciseDTO>> getAllExercises() {
-        LOGGER.info("Iniciando el proceso de obtener todos los ejercicios");
+    public ResponseEntity<List<ExerciseDTO>> getAllExercises(@RequestParam(required = false) String bodyPart) {
+        LOGGER.info("Iniciando el proceso de obtener ejercicios");
         try {
-            List<ExerciseDTO> exercises = exerciseBL.findAllExercises();
+            List<ExerciseDTO> exercises;
+            if (bodyPart != null && !bodyPart.isEmpty()) {
+                exercises = exerciseBL.findExercisesByBodyPart(bodyPart);
+                LOGGER.info("Ejercicios filtrados por parte del cuerpo obtenidos con éxito");
+            } else {
+                exercises = exerciseBL.findAllExercises();
+                LOGGER.info("Todos los ejercicios obtenidos con éxito");
+            }
             return ResponseEntity.ok(exercises);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al obtener los ejercicios");
+            LOGGER.info("Ocurrió un error al obtener los ejercicios: " + e.getMessage() + e.getCause() + e.getClass());
             return ResponseEntity.badRequest().build();
         } finally {
-            LOGGER.info("Finalizando el proceso de obtener todos los ejercicios");
+            LOGGER.info("Finalizando el proceso de obtener ejercicios");
         }
     }
 }

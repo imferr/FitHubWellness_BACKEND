@@ -11,6 +11,9 @@ public class ExerciseEntity {
     @Column(name = "exerciseid")
     private Integer exerciseId;
 
+    @Column(name = "bodypart", nullable = false, length = 100)
+    private String bodyPart;
+
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
@@ -23,8 +26,9 @@ public class ExerciseEntity {
     public ExerciseEntity() {
     }
 
-    public ExerciseEntity(Integer exerciseId, String name, String description, String linkPicture) {
+    public ExerciseEntity(Integer exerciseId, String bodyPart, String name, String description, String linkPicture) {
         this.exerciseId = exerciseId;
+        this.bodyPart = bodyPart;
         this.name = name;
         this.description = description;
         this.linkPicture = linkPicture;
@@ -34,6 +38,10 @@ public class ExerciseEntity {
 
     public int getExerciseId() {
         return exerciseId;
+    }
+
+    public String getbodyPart() {
+        return bodyPart;
     }
 
     public String getName() {
@@ -54,6 +62,10 @@ public class ExerciseEntity {
         this.exerciseId = exerciseId;
     }
 
+    public void setbodyPart(String bodyPart) {
+        this.bodyPart = bodyPart;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -72,6 +84,7 @@ public class ExerciseEntity {
     public String toString() {
         return "ExerciseDTO{" +
                 "exerciseId=" + exerciseId + 
+                ", bodyPart=" + bodyPart +
                 ", name=" + name + 
                 ", description=" + description + 
                 ", linkPicture=" + linkPicture + 
