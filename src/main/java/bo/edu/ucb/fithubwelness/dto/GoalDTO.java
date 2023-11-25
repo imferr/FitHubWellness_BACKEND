@@ -5,20 +5,20 @@ public class GoalDTO {
     private int goalId;
     private Boolean accomplished;
     private Double quantity;
+    private String exerciseName;
     private UserDTO user;
     private TypeGoalDTO typeGoal;
-    private ExerciseDTO exercise;
 
     public GoalDTO() {
     }
 
-    public GoalDTO(int goalId, Boolean accomplished, Double quantity, UserDTO user, TypeGoalDTO typeGoal, ExerciseDTO exercise) {
+    public GoalDTO(int goalId, Boolean accomplished, Double quantity, String exerciseName, UserDTO user, TypeGoalDTO typeGoal) {
         this.goalId = goalId;
         this.accomplished = accomplished;
         this.quantity = quantity;
+        this.exerciseName = exerciseName;
         this.user = user;
         this.typeGoal = typeGoal;
-        this.exercise = exercise;
     }
 
     //getters:
@@ -35,16 +35,16 @@ public class GoalDTO {
         return quantity;
     }
 
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
     public UserDTO getUser() {
         return user;
     }
 
     public TypeGoalDTO getTypeGoal() {
         return typeGoal;
-    }
-
-    public ExerciseDTO getExercise() {
-        return exercise;
     }
 
     //setters:
@@ -61,6 +61,10 @@ public class GoalDTO {
         this.quantity = quantity;
     }
 
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
     public void setUser(UserDTO user) {
         this.user = user;
     }
@@ -69,21 +73,15 @@ public class GoalDTO {
         this.typeGoal = typeGoal;
     }
 
-    public void setExercise(ExerciseDTO exercise) {
-        this.exercise = exercise;
-    }
-
-    //toString:
-
     @Override
     public String toString() {
-        return "GoalDTO{" + 
-                "goalId=" + goalId + 
-                ", accomplished=" + accomplished + 
-                ", quantity=" + quantity + 
-                ", user=" + user + 
-                ", typeGoal=" + typeGoal + 
-                ", exercise=" + exercise + 
+        return "GoalDTO{" +
+                "goalId=" + goalId +
+                ", accomplished=" + accomplished +
+                ", quantity=" + quantity +
+                ", exerciseName='" + exerciseName + '\'' +
+                ", user=" + user +
+                ", typeGoal=" + typeGoal +
                 '}';
     }
 }

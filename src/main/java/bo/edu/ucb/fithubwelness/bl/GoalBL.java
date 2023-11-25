@@ -1,4 +1,4 @@
-package bo.edu.ucb.fithubwelness.bl;
+/*package bo.edu.ucb.fithubwelness.bl;
 
 import bo.edu.ucb.fithubwelness.dao.GoalDAO;
 import bo.edu.ucb.fithubwelness.dto.ExerciseDTO;
@@ -50,4 +50,4 @@ public class GoalBL {
         goalDTO.setGoalId(goalEntity.getGoalId());
         return goalDTO;
     }
-}
+}*/
