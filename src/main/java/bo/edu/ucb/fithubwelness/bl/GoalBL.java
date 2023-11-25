@@ -1,16 +1,16 @@
 package bo.edu.ucb.fithubwelness.bl;
 
 import bo.edu.ucb.fithubwelness.dao.GoalDAO;
+import bo.edu.ucb.fithubwelness.dao.TypeGoalDAO;
 import bo.edu.ucb.fithubwelness.dto.ExerciseDTO;
 import bo.edu.ucb.fithubwelness.dto.GoalDTO;
 import bo.edu.ucb.fithubwelness.dto.TypeGoalDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
 import bo.edu.ucb.fithubwelness.entity.GoalEntity;
-import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import bo.edu.ucb.fithubwelness.entity.TypeGoalEntity;
+import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,51 +20,48 @@ public class GoalBL {
     private final GoalDAO goalDAO;
     private final ExerciseBL exerciseBL;
     private final UserBL userBL;
+    private final TypeGoalDAO typeGoalDAO;
 
     @Autowired
-    public GoalBL(GoalDAO goalDAO, ExerciseBL exerciseBL, UserBL userBL) {
+    public GoalBL(GoalDAO goalDAO, ExerciseBL exerciseBL, UserBL userBL, TypeGoalDAO typeGoalDAO) {
         this.goalDAO = goalDAO;
         this.exerciseBL = exerciseBL;
         this.userBL = userBL;
+        this.typeGoalDAO = typeGoalDAO;
     }
 
     public GoalDTO createGoal(GoalDTO goalDTO) {
         goalDTO.setAccomplished(false);
 
-        if (goalDTO.getTypeGoal().getTypeGoalId() == 1 || goalDTO.getTypeGoal().getTypeGoalId() == 2) {
+        if (goalDTO.getTypeGoalId().getTypeGoalId() == 1 || goalDTO.getTypeGoalId().getTypeGoalId() == 2) {
             List<ExerciseDTO> exercises = exerciseBL.findExercisesByName(goalDTO.getExerciseName());
             if (!exercises.isEmpty()) {
                 goalDTO.setExerciseName(exercises.get(0).getName());
             }
         } else {
-            goalDTO.setExerciseName(null);
+            goalDTO.setExerciseName("-");
         }
 
-        UserEntity user = userBL.findUserById(goalDTO.getUser().getUserId());
-        GoalEntity goalEntity = convertToEntity(goalDTO, user);
+        int userId = goalDTO.getUserId().getUserId();
+        UserEntity userEntity = userBL.findUserById(userId);
+
+        int typeGoalId = goalDTO.getTypeGoalId().getTypeGoalId();
+        TypeGoalEntity typeGoalEntity = findTypeGoalById(typeGoalId);
+
+        GoalEntity goalEntity = new GoalEntity();
+        goalEntity.setAccomplished(goalDTO.getAccomplished());
+        goalEntity.setQuantity(goalDTO.getQuantity());
+        goalEntity.setExerciseName(goalDTO.getExerciseName());
+        goalEntity.setUserId(userEntity);
+        goalEntity.setTypeGoalId(typeGoalEntity);
 
         goalDAO.save(goalEntity);
         return convertToDTO(goalEntity);
     }
 
-    public GoalDTO getGoalById(int goalId) {
-        Optional<GoalEntity> goalEntity = goalDAO.findById(goalId);
-        if (goalEntity.isPresent()) {
-            return convertToDTO(goalEntity.get());
-        } else {
-            throw new RuntimeException("Goal not found");
-        }
-    }
-
-    private GoalEntity convertToEntity(GoalDTO dto, UserEntity userEntity) {
-        GoalEntity entity = new GoalEntity();
-        entity.setGoalId(dto.getGoalId());
-        entity.setAccomplished(dto.getAccomplished());
-        entity.setQuantity(dto.getQuantity());
-        entity.setExerciseName(dto.getExerciseName());
-        entity.setUserId(userEntity);
-        entity.setTypeGoalId(new TypeGoalEntity(dto.getTypeGoal().getTypeGoalId(), dto.getTypeGoal().getTypeGoal()));
-        return entity;
+    private TypeGoalEntity findTypeGoalById(int typeGoalId) {
+        return typeGoalDAO.findById(typeGoalId)
+                .orElseThrow(() -> new RuntimeException("TypeGoal not found"));
     }
 
     private GoalDTO convertToDTO(GoalEntity entity) {
@@ -76,16 +73,23 @@ public class GoalBL {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(entity.getUserId().getUserId());
-        userDTO.setName(entity.getUserId().getName());
-        userDTO.setEmail(entity.getUserId().getEmail());
-        userDTO.setBirthday(entity.getUserId().getBirthday());
-        dto.setUser(userDTO);
+        dto.setUserId(userDTO);
 
         TypeGoalDTO typeGoalDTO = new TypeGoalDTO();
         typeGoalDTO.setTypeGoalId(entity.getTypeGoalId().getTypeGoalId());
         typeGoalDTO.setTypeGoal(entity.getTypeGoalId().getTypeGoal());
-        dto.setTypeGoal(typeGoalDTO);
+        dto.setTypeGoalId(typeGoalDTO);
 
         return dto;
     }
+
+    public GoalDTO getGoalById(int goalId) {
+        Optional<GoalEntity> goalEntity = goalDAO.findById(goalId);
+        if (goalEntity.isPresent()) {
+            return convertToDTO(goalEntity.get());
+        } else {
+            throw new RuntimeException("Goal not found");
+        }
+    }
+
 }
