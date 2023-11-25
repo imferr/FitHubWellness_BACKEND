@@ -6,8 +6,8 @@ import bo.edu.ucb.fithubwelness.dto.GoalDTO;
 import bo.edu.ucb.fithubwelness.dto.TypeGoalDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
 import bo.edu.ucb.fithubwelness.entity.GoalEntity;
-import bo.edu.ucb.fithubwelness.entity.TypeGoalEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
+import bo.edu.ucb.fithubwelness.entity.TypeGoalEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +47,15 @@ public class GoalBL {
         return convertToDTO(goalEntity);
     }
 
+    public GoalDTO getGoalById(int goalId) {
+        Optional<GoalEntity> goalEntity = goalDAO.findById(goalId);
+        if (goalEntity.isPresent()) {
+            return convertToDTO(goalEntity.get());
+        } else {
+            throw new RuntimeException("Goal not found");
+        }
+    }
+
     private GoalEntity convertToEntity(GoalDTO dto, UserEntity userEntity) {
         GoalEntity entity = new GoalEntity();
         entity.setGoalId(dto.getGoalId());
@@ -79,14 +88,4 @@ public class GoalBL {
 
         return dto;
     }
-
-    public GoalDTO getGoalById(int goalId) {
-        Optional<GoalEntity> goalEntity = goalDAO.findById(goalId);
-        if (goalEntity.isPresent()) {
-            return convertToDTO(goalEntity.get());
-        } else {
-            throw new RuntimeException("Goal not found");
-        }
-    }
-
 }
