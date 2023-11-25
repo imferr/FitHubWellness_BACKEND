@@ -27,4 +27,12 @@ public class ExerciseBL {
                 .filter(exercise -> exercise.getbodyPart().equalsIgnoreCase(bodyPart))
                 .collect(Collectors.toList());
     }
+
+    public List<ExerciseDTO> findExercisesByName(String name) {
+        List<ExerciseDTO> allExercises = exerciseDbService.getAllExercises();
+        return allExercises.stream()
+                .filter(exercise -> exercise.getName().equalsIgnoreCase(name))
+                .collect(Collectors.toList());
+    }
+    
 }

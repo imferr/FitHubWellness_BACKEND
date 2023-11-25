@@ -35,4 +35,8 @@ public class TypeGoalBL {
     public List<TypeGoalEntity> getAllTypeGoal() {
         return typeGoalDAO.findAll();
     }
+
+    public TypeGoalEntity findTypeGoalById(int id) {
+        return typeGoalDAO.findById(id).orElseThrow(() -> new RuntimeException("TypeGoal not found"));
+    }    
 }
