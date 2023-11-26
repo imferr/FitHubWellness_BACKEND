@@ -81,7 +81,7 @@ public class EvaluationBL {
 
     private void updateEvaluationHistory(EvaluationEntity evaluationEntity, String host, Integer userId) {
         EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
-        //historyEntity.setEvaluationId(evaluationEntity.getEvaluationId());
+        // historyEntity.setEvaluationId(evaluationEntity.getEvaluationId());
         historyEntity.setWeight(evaluationEntity.getWeight());
         historyEntity.setHeight(evaluationEntity.getHeight());
         historyEntity.setDate(evaluationEntity.getDate());
@@ -93,4 +93,13 @@ public class EvaluationBL {
         historyEntity.setAudUser(userId);
         evaluationHistoryDAO.save(historyEntity);
     }
+
+    public EvaluationDTO getEvaluationByUser(UserEntity user) {
+        EvaluationEntity evaluationEntity = evaluationDAO.findByUserId(user);
+        if (evaluationEntity != null) {
+            return convertToDTO(evaluationEntity);
+        }
+        return null;
+    }
+
 }
