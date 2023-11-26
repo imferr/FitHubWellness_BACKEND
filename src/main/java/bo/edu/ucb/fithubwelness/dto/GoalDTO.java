@@ -1,27 +1,28 @@
 package bo.edu.ucb.fithubwelness.dto;
 
 public class GoalDTO {
-    
+
     private int goalId;
     private Boolean accomplished;
     private Double quantity;
-    private UserDTO user;
-    private TypeGoalDTO typeGoal;
-    private ExerciseDTO exercise;
+    private String exerciseName;
+    private UserDTO userId;
+    private TypeGoalDTO typeGoalId;
 
     public GoalDTO() {
     }
 
-    public GoalDTO(int goalId, Boolean accomplished, Double quantity, UserDTO user, TypeGoalDTO typeGoal, ExerciseDTO exercise) {
+    public GoalDTO(int goalId, Boolean accomplished, Double quantity, String exerciseName, UserDTO userId,
+            TypeGoalDTO typeGoalId) {
         this.goalId = goalId;
         this.accomplished = accomplished;
         this.quantity = quantity;
-        this.user = user;
-        this.typeGoal = typeGoal;
-        this.exercise = exercise;
+        this.exerciseName = exerciseName;
+        this.userId = userId;
+        this.typeGoalId = typeGoalId;
     }
 
-    //getters:
+    // getters:
 
     public int getGoalId() {
         return goalId;
@@ -35,19 +36,19 @@ public class GoalDTO {
         return quantity;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public String getExerciseName() {
+        return exerciseName;
     }
 
-    public TypeGoalDTO getTypeGoal() {
-        return typeGoal;
+    public UserDTO getUserId() {
+        return userId;
     }
 
-    public ExerciseDTO getExercise() {
-        return exercise;
+    public TypeGoalDTO getTypeGoalId() {
+        return typeGoalId;
     }
 
-    //setters:
+    // setters:
 
     public void setGoalId(int goalId) {
         this.goalId = goalId;
@@ -61,29 +62,27 @@ public class GoalDTO {
         this.quantity = quantity;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
-    public void setTypeGoal(TypeGoalDTO typeGoal) {
-        this.typeGoal = typeGoal;
+    public void setUserId(UserDTO userId) {
+        this.userId = userId;
     }
 
-    public void setExercise(ExerciseDTO exercise) {
-        this.exercise = exercise;
+    public void setTypeGoalId(TypeGoalDTO typeGoalId) {
+        this.typeGoalId = typeGoalId;
     }
-
-    //toString:
 
     @Override
     public String toString() {
-        return "GoalDTO{" + 
-                "goalId=" + goalId + 
-                ", accomplished=" + accomplished + 
-                ", quantity=" + quantity + 
-                ", user=" + user + 
-                ", typeGoal=" + typeGoal + 
-                ", exercise=" + exercise + 
+        return "GoalDTO{" + "goalId=" + goalId +
+                ", accomplished=" + accomplished +
+                ", quantity=" + quantity +
+                ", exerciseName=" + exerciseName +
+                ", userId=" + userId +
+                ", typeGoalId=" + typeGoalId +
                 '}';
     }
+
 }

@@ -17,6 +17,9 @@ public class GoalEntity {
     @Column(name = "quantity", nullable = false)
     private Double quantity;
 
+    @Column(name = "exercisename", nullable = false, length = 500)
+    private String exerciseName;
+
     @ManyToOne
     @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
     private UserEntity userId;
@@ -25,25 +28,21 @@ public class GoalEntity {
     @JoinColumn(name = "type_goal_typegoalid", referencedColumnName = "typegoalid", nullable = false)
     private TypeGoalEntity typeGoalId;
 
-    @ManyToOne
-    @JoinColumn(name = "exercise_exerciseid", referencedColumnName = "exerciseid", nullable = false)
-    private ExerciseEntity exerciseId;
-
     public GoalEntity() {
     }
 
-    public GoalEntity(Integer goalId, Boolean accomplished, Double quantity, UserEntity userId, TypeGoalEntity typeGoalId, ExerciseEntity exerciseId) {
+    public GoalEntity(Integer goalId, Boolean accomplished, Double quantity, String exerciseName, UserEntity userId, TypeGoalEntity typeGoalId) {
         this.goalId = goalId;
         this.accomplished = accomplished;
         this.quantity = quantity;
+        this.exerciseName = exerciseName;
         this.userId = userId;
         this.typeGoalId = typeGoalId;
-        this.exerciseId = exerciseId;
     }
 
     //getters:
 
-    public int getGoalId() {
+    public Integer getGoalId() {
         return goalId;
     }
 
@@ -55,6 +54,10 @@ public class GoalEntity {
         return quantity;
     }
 
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
     public UserEntity getUserId() {
         return userId;
     }
@@ -63,13 +66,9 @@ public class GoalEntity {
         return typeGoalId;
     }
 
-    public ExerciseEntity getExerciseId() {
-        return exerciseId;
-    }
-
     //setters:
 
-    public void setGoalId(int goalId) {
+    public void setGoalId(Integer goalId) {
         this.goalId = goalId;
     }
 
@@ -81,6 +80,10 @@ public class GoalEntity {
         this.quantity = quantity;
     }
 
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
     public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
@@ -89,21 +92,15 @@ public class GoalEntity {
         this.typeGoalId = typeGoalId;
     }
 
-    public void setExerciseId(ExerciseEntity exerciseId) {
-        this.exerciseId = exerciseId;
-    }
-
-    //toString:
-
     @Override
     public String toString() {
-        return "GoalDTO{" + 
-                "goalId=" + goalId + 
-                ", accomplished=" + accomplished + 
-                ", quantity=" + quantity + 
-                ", userId=" + userId + 
-                ", typeGoalId=" + typeGoalId + 
-                ", exerciseId=" + exerciseId + 
+        return "GoalEntity{" +
+                "goalId=" + goalId +
+                ", accomplished=" + accomplished +
+                ", quantity=" + quantity +
+                ", exerciseName='" + exerciseName + '\'' +
+                ", userId=" + userId +
+                ", typeGoalId=" + typeGoalId +
                 '}';
     }
 }

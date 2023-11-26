@@ -41,24 +41,14 @@ CREATE TABLE EVALUATION (
     CONSTRAINT EVALUATION_pk PRIMARY KEY (evaluationId)
 );
 
--- Table: EXERCISE
-CREATE TABLE EXERCISE (
-    exerciseId Serial  NOT NULL,
-    bodypart varchar(100)  NOT NULL,
-    name varchar(100)  NOT NULL,
-    description varchar(500)  NOT NULL,
-    linkPicture varchar(500)  NOT NULL,
-    CONSTRAINT EXERCISE_pk PRIMARY KEY (exerciseId)
-);
-
 -- Table: GOAL
 CREATE TABLE GOAL (
     goalId Serial  NOT NULL,
     accomplished boolean  NOT NULL,
     quantity numeric(10,5)  NOT NULL,
+    exerciseName varchar(500)  NOT NULL,
     USERS_userId Serial  NOT NULL,
     TYPE_GOAL_typeGoalId Serial  NOT NULL,
-    EXERCISE_exerciseId Serial  NOT NULL,
     CONSTRAINT GOAL_pk PRIMARY KEY (goalId)
 );
 
@@ -140,14 +130,6 @@ ALTER TABLE DAILY_TRAINING ADD CONSTRAINT DAILY_TRAINING_USERS
 ALTER TABLE EVALUATION ADD CONSTRAINT EVALUATION_USERS
     FOREIGN KEY (USERS_userId)
     REFERENCES USERS (userId)  
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE
-;
-
--- Reference: GOAL_EXERCISE (table: GOAL)
-ALTER TABLE GOAL ADD CONSTRAINT GOAL_EXERCISE
-    FOREIGN KEY (EXERCISE_exerciseId)
-    REFERENCES EXERCISE (exerciseId)  
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE
 ;

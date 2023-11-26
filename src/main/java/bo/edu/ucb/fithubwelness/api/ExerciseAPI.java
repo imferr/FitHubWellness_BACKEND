@@ -23,11 +23,16 @@ public class ExerciseAPI {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ExerciseDTO>> getAllExercises(@RequestParam(required = false) String bodyPart) {
+    public ResponseEntity<List<ExerciseDTO>> getAllExercises(
+            @RequestParam(required = false) String bodyPart,
+            @RequestParam(required = false) String name) {
         LOGGER.info("Iniciando el proceso de obtener ejercicios");
         try {
             List<ExerciseDTO> exercises;
-            if (bodyPart != null && !bodyPart.isEmpty()) {
+            if (name != null && !name.isEmpty()) {
+                exercises = exerciseBL.findExercisesByName(name);
+                LOGGER.info("Ejercicios filtrados por nombre obtenidos con éxito");
+            } else if (bodyPart != null && !bodyPart.isEmpty()) {
                 exercises = exerciseBL.findExercisesByBodyPart(bodyPart);
                 LOGGER.info("Ejercicios filtrados por parte del cuerpo obtenidos con éxito");
             } else {
@@ -42,4 +47,5 @@ public class ExerciseAPI {
             LOGGER.info("Finalizando el proceso de obtener ejercicios");
         }
     }
+    
 }

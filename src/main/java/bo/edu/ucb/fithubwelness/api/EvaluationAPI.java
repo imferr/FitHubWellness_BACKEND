@@ -72,4 +72,23 @@ public class EvaluationAPI {
         }
         return remoteAddr;
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<EvaluationDTO> getEvaluationByUserId(@PathVariable int userId) {
+        LOGGER.info("Inicio de búsqueda de evaluación por ID de usuario");
+        try {
+            UserEntity user = userBL.findUserById(userId);
+            EvaluationDTO evaluation = evaluationBL.getEvaluationByUser(user);
+            if (evaluation == null) {
+                LOGGER.info("Evaluación no encontrada para el usuario con ID: " + userId);
+                return ResponseEntity.notFound().build();
+            }
+            LOGGER.info("Evaluación encontrada para el usuario con ID: " + userId);
+            return ResponseEntity.ok(evaluation);
+        } catch (RuntimeException e) {
+            LOGGER.info("Ocurrió un error al buscar la evaluación");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
