@@ -5,8 +5,8 @@ Accept: application/json
 
 {
     "quantity": 45.0,
-    "userId": {"userId": 1},
-    "typeGoalId": {"typeGoalId": 1},
+    "userId": 1,
+    "typeGoalId": 1,
     "exerciseName": "air bike"
 }
 
