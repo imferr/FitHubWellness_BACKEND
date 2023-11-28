@@ -68,18 +68,19 @@ public class GoalAPI {
         }
     }
 
-    @GetMapping("/{goalId}")
-    public ResponseEntity<GoalDTO> getGoalById(@PathVariable int goalId) {
-        LOGGER.info("Iniciando el proceso de obtener objetivo por id");
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Map<String, Object>> findGoalsByUserId(@PathVariable int userId) {
+        LOGGER.info("Iniciando el proceso de búsqueda de objetivos por id de usuario");
         try {
-            GoalDTO goalDTO = goalBL.getGoalById(goalId);
-            LOGGER.info("Objetivo obtenido con éxito");
-            return new ResponseEntity<>(goalDTO, HttpStatus.OK);
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("goals", goalBL.findGoalsByUserId(userId));
+            LOGGER.info("Objetivos encontrados con éxito");
+            return new ResponseEntity<>(responseMap, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al obtener el objetivo: " + e.getMessage() + e.getCause() + e.getClass());
+            LOGGER.info("Ocurrió un error al buscar los objetivos: " + e.getMessage() + e.getCause() + e.getClass());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
-            LOGGER.info("Finalizando el proceso de obtener objetivo por id");
+            LOGGER.info("Finalizando el proceso de búsqueda de objetivos por id de usuario");
         }
     }
 }
