@@ -52,7 +52,7 @@ public class PersonalRecordBL {
     }
 
     public PersonalRecordDTO updatePersonalRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
-        PersonalRecordEntity existingPersonalRecord = personalRecordDAO.findByUserId(user);
+        PersonalRecordEntity existingPersonalRecord = personalRecordDAO.findByPersonalRecordId(personalRecordDTO.getPersonalRecordId());
         if (existingPersonalRecord == null) {
             throw new RuntimeException("No se encontró un registro personal para actualizar.");
         }

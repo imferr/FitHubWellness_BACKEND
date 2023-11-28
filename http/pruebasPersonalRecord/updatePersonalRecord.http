@@ -1,0 +1,9 @@
+PUT http://localhost:8080/api/v1/personalrecord/user/1/update/2
+Content-Type: application/json
+Accept: application/json
+
+{
+    "weight": 70,
+    "repetitions": 8,
+    "exerciseName": "Press de banca"
+}

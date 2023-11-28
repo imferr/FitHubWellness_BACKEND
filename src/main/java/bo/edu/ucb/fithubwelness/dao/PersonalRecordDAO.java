@@ -9,6 +9,7 @@ import bo.edu.ucb.fithubwelness.entity.UserEntity;
 
 public interface PersonalRecordDAO extends JpaRepository<PersonalRecordEntity, Integer> {
     PersonalRecordEntity findByUserId(UserEntity user);
-    
     List<PersonalRecordEntity> findByUserIdUserId(int userId);
+    PersonalRecordEntity findByPersonalRecordId(int personalRecordId);
 }
+
