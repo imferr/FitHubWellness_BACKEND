@@ -23,18 +23,18 @@ public class PersonalRecordEntity {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "goal_goalid", referencedColumnName = "goalid", nullable = false)
-    private GoalEntity goalId;
+    @JoinColumn(name = "users_userid", nullable = false)
+    private UserEntity userId;
 
     public PersonalRecordEntity() {
     }
 
-    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, Date date, GoalEntity goalId) {
+    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, Date date, UserEntity userId) {
         this.personalRecordId = personalRecordId;
         this.weight = weight;
         this.repetitions = repetitions;
         this.date = date;
-        this.goalId = goalId;
+        this.userId = userId;
     }
 
     //getters:
@@ -55,8 +55,8 @@ public class PersonalRecordEntity {
         return date;
     }
 
-    public GoalEntity getGoalId() {
-        return goalId;
+    public UserEntity getUserId() {
+        return userId;
     }
 
     //setters:
@@ -77,8 +77,8 @@ public class PersonalRecordEntity {
         this.date = date;
     }
 
-    public void setGoalId(GoalEntity goalId) {
-        this.goalId = goalId;
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
     }
 
     //toString:
@@ -90,7 +90,7 @@ public class PersonalRecordEntity {
                 ", weight=" + weight + 
                 ", repetitions=" + repetitions + 
                 ", date='" + date + '\'' + 
-                ", goalId=" + goalId + 
+                ", userId=" + userId +
                 '}';
     }
 }
