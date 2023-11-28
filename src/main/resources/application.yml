@@ -16,5 +16,5 @@ spring:
 
 # Configuración para la API de Exercisedb
 exercisedb:
-  api-key: a7a76cf85cmsh655ed18dbcb2a2dp1c56bfjsn8abedd3c1d3a
+  api-key: fe56d0d80amsh235f02a93340fbdp120fb7jsn3aeedaa46b85
 

@@ -8,6 +8,7 @@ import bo.edu.ucb.fithubwelness.dto.TypeGoalDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
 import bo.edu.ucb.fithubwelness.entity.TypeGoalEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,31 +36,18 @@ public class GoalAPI {
         this.typeGoalBL = typeGoalBL;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createGoal(@RequestBody Map<String, Object> requestBody) {
+    @PostMapping("/create/user/{userId}/typeGoal/{typeGoalId}")
+    public ResponseEntity<GoalDTO> createGoal(@PathVariable int userId, @PathVariable int typeGoalId,
+            @RequestBody GoalDTO goalDTO, HttpServletRequest request) {
         LOGGER.info("Iniciando el proceso de creación de objetivo");
         try {
-            GoalDTO goalDTO = new GoalDTO();
-            goalDTO.setQuantity((Double) requestBody.get("quantity"));
-            UserEntity user = userBL.findUserById(((Integer) requestBody.get("userId")));
-            UserDTO userDTO = new UserDTO();
-            userDTO.setUserId(user.getUserId());
-            userDTO.setName(user.getName());
-            TypeGoalEntity typeGoalEntity = typeGoalBL.findTypeGoalById(((Integer) requestBody.get("typeGoalId")));
-            TypeGoalDTO typeGoalDTO = new TypeGoalDTO();
-            typeGoalDTO.setTypeGoalId(typeGoalEntity.getTypeGoalId());
-            goalDTO.setUserId(userDTO);
-            goalDTO.setTypeGoalId(typeGoalDTO);
-            goalDTO.setExerciseName((String) requestBody.get("exerciseName"));
-            GoalDTO createdGoalDTO = goalBL.createGoal(goalDTO);
-            Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("goalId", createdGoalDTO.getGoalId());
-            responseMap.put("accomplished", createdGoalDTO.getAccomplished());
-            responseMap.put("quantity", createdGoalDTO.getQuantity());
-            responseMap.put("exerciseName", createdGoalDTO.getExerciseName());
-            responseMap.put("typeGoalId", createdGoalDTO.getTypeGoalId());
+            UserEntity user = userBL.findUserById(userId);
+            TypeGoalEntity typeGoal = typeGoalBL.findTypeGoalById(typeGoalId);
+            goalDTO.setUserId(new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getBirthday()));
+            goalDTO.setTypeGoalId(new TypeGoalDTO(typeGoal.getTypeGoalId(), typeGoal.getTypeGoal()));
+            GoalDTO createdGoal = goalBL.createGoal(goalDTO, user, typeGoal);
             LOGGER.info("Objetivo creado con éxito");
-            return new ResponseEntity<>(responseMap, HttpStatus.CREATED);
+            return ResponseEntity.ok(createdGoal);
         } catch (Exception e) {
             LOGGER.info("Ocurrió un error al crear el objetivo: " + e.getMessage() + e.getCause() + e.getClass());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
