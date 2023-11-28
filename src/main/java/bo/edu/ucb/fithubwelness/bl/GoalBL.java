@@ -11,6 +11,8 @@ import bo.edu.ucb.fithubwelness.entity.TypeGoalEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,13 +85,14 @@ public class GoalBL {
         return dto;
     }
 
-    public GoalDTO getGoalById(int goalId) {
-        Optional<GoalEntity> goalEntity = goalDAO.findById(goalId);
-        if (goalEntity.isPresent()) {
-            return convertToDTO(goalEntity.get());
-        } else {
-            throw new RuntimeException("Goal not found");
+    public List<GoalDTO> findGoalsByUserId(int userId) {
+        List<GoalEntity> goalEntities = goalDAO.findByUserId_UserId(userId);
+
+        List<GoalDTO> goalDTOs = new ArrayList<>();
+        for (GoalEntity goalEntity : goalEntities) {
+            goalDTOs.add(convertToDTO(goalEntity));
         }
+        return goalDTOs;
     }
 
 }
