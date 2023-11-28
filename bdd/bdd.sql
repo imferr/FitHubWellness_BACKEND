@@ -58,6 +58,7 @@ CREATE TABLE PERSONAL_RECORD (
     weight numeric(10,5)  NOT NULL,
     repetitions int  NOT NULL,
     date date  NOT NULL,
+    exerciseName varchar(500)  NOT NULL,
     USERS_userId Serial  NOT NULL,
     CONSTRAINT PERSONAL_RECORD_pk PRIMARY KEY (personalRecordId)
 );

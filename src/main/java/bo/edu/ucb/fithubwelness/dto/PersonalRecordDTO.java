@@ -8,16 +8,18 @@ public class PersonalRecordDTO {
     private Double weight;
     private int repetitions;
     private Date date;
+    private String exerciseName;
     private UserDTO userId;
 
     public PersonalRecordDTO() {
     }
 
-    public PersonalRecordDTO(int personalRecordId, Double weight, int repetitions, Date date, UserDTO userId) {
+    public PersonalRecordDTO(int personalRecordId, Double weight, int repetitions, Date date, String exerciseName, UserDTO userId) {
         this.personalRecordId = personalRecordId;
         this.weight = weight;
         this.repetitions = repetitions;
         this.date = date;
+        this.exerciseName = exerciseName;
         this.userId = userId;
     }
 
@@ -37,6 +39,10 @@ public class PersonalRecordDTO {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
     }
 
     public UserDTO getUserId() {
@@ -61,6 +67,10 @@ public class PersonalRecordDTO {
         this.date = date;
     }
 
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
     public void setUserId(UserDTO userId) {
         this.userId = userId;
     }
@@ -74,6 +84,7 @@ public class PersonalRecordDTO {
                 ", weight=" + weight +
                 ", repetitions=" + repetitions +
                 ", date=" + date +
+                ", exerciseName='" + exerciseName + '\'' +
                 ", userId=" + userId +
                 '}';
     }

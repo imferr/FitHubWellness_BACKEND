@@ -22,6 +22,9 @@ public class PersonalRecordEntity {
     @Column(name = "date", nullable = false)
     private Date date;
 
+    @Column(name = "exercisename", nullable = false, length = 500)
+    private String exerciseName;
+
     @ManyToOne
     @JoinColumn(name = "users_userid", nullable = false)
     private UserEntity userId;
@@ -29,11 +32,12 @@ public class PersonalRecordEntity {
     public PersonalRecordEntity() {
     }
 
-    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, Date date, UserEntity userId) {
+    public PersonalRecordEntity(Integer personalRecordId, Double weight, Integer repetitions, Date date, String exerciseName, UserEntity userId) {
         this.personalRecordId = personalRecordId;
         this.weight = weight;
         this.repetitions = repetitions;
         this.date = date;
+        this.exerciseName = exerciseName;
         this.userId = userId;
     }
 
@@ -53,6 +57,10 @@ public class PersonalRecordEntity {
 
     public Date getDate() {
         return date;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
     }
 
     public UserEntity getUserId() {
@@ -77,6 +85,10 @@ public class PersonalRecordEntity {
         this.date = date;
     }
 
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
     public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
@@ -90,6 +102,7 @@ public class PersonalRecordEntity {
                 ", weight=" + weight + 
                 ", repetitions=" + repetitions + 
                 ", date='" + date + '\'' + 
+                ", exerciseName='" + exerciseName + '\'' +
                 ", userId=" + userId +
                 '}';
     }
