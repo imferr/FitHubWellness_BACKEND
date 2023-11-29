@@ -90,4 +90,13 @@ public class PersonalRecordBL {
         }
         return personalRecordsDTO;
     }
+
+    public PersonalRecordDTO findPersonalRecordById(int recordId) {
+        PersonalRecordEntity record = personalRecordDAO.findByPersonalRecordId(recordId);
+        if (record == null) {
+            throw new RuntimeException("Registro personal no encontrado con ID: " + recordId);
+        }
+        return convertToDTO(record);
+    }
+    
 }

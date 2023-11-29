@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,4 +78,17 @@ public class PersonalRecordAPI {
             LOGGER.info("Fin de obtencion de personal records");
         }
     }
+
+    @GetMapping("/{recordId}")
+    public ResponseEntity<PersonalRecordDTO> getPersonalRecordById(@PathVariable int recordId) {
+        LOGGER.info("Obteniendo Personal Record con ID: " + recordId);
+        try {
+            PersonalRecordDTO record = personalRecordBL.findPersonalRecordById(recordId);
+            return ResponseEntity.ok(record);
+        } catch (Exception e) {
+            LOGGER.severe("Error al obtener Personal Record: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }
