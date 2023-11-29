@@ -61,7 +61,7 @@ public class UserBL {
         userEntity = userDAO.save(userEntity);
 
         evaluationDTO.setUserId(new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday()));
-        evaluationBL.createEvaluation(evaluationDTO, userEntity, host);
+        evaluationBL.createOrUpdateEvaluation(evaluationDTO, userEntity, host);
 
         return new UserDTO(userEntity.getUserId(), userEntity.getName(), userEntity.getEmail(), userEntity.getBirthday());
     }

@@ -8,17 +8,19 @@ public class PersonalRecordDTO {
     private Double weight;
     private int repetitions;
     private Date date;
-    private GoalDTO goal;
+    private String exerciseName;
+    private UserDTO userId;
 
     public PersonalRecordDTO() {
     }
 
-    public PersonalRecordDTO(int personalRecordId, Double weight, int repetitions, Date date, GoalDTO goal) {
+    public PersonalRecordDTO(int personalRecordId, Double weight, int repetitions, Date date, String exerciseName, UserDTO userId) {
         this.personalRecordId = personalRecordId;
         this.weight = weight;
         this.repetitions = repetitions;
         this.date = date;
-        this.goal = goal;
+        this.exerciseName = exerciseName;
+        this.userId = userId;
     }
 
     //getters:
@@ -39,8 +41,12 @@ public class PersonalRecordDTO {
         return date;
     }
 
-    public GoalDTO getGoal() {
-        return goal;
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+    public UserDTO getUserId() {
+        return userId;
     }
 
     //setters:
@@ -61,8 +67,12 @@ public class PersonalRecordDTO {
         this.date = date;
     }
 
-    public void setGoal(GoalDTO goal) {
-        this.goal = goal;
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public void setUserId(UserDTO userId) {
+        this.userId = userId;
     }
 
     //toString:
@@ -74,7 +84,8 @@ public class PersonalRecordDTO {
                 ", weight=" + weight +
                 ", repetitions=" + repetitions +
                 ", date=" + date +
-                ", goal=" + goal +
+                ", exerciseName='" + exerciseName + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }

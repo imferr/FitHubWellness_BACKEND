@@ -1,27 +1,22 @@
 ### crear objetivo de tipo levantar peso o repetición
-POST http://localhost:8080/api/v1/goal/create
+POST http://localhost:8080/api/v1/goal/create/user/1/typeGoal/2
 Content-Type: application/json
 Accept: application/json
 
 {
     "quantity": 45.0,
-    "userId": 1,
-    "typeGoalId": 1,
     "exerciseName": "air bike"
 }
 
-
 ### crear objetivo de tipo bajar de peso
 
-POST http://localhost:8080/api/v1/goal/create
+POST http://localhost:8080/api/v1/goal/create/user/1/typeGoal/3
 Content-Type: application/json
 Accept: application/json
 
 {
     "quantity": 45.0,
-    "userId": {"userId": 1},
-    "typeGoalId": {"typeGoalId": 3},
-    "exerciseName": ""
+    "exerciseName": "air bike"
 }
 
 

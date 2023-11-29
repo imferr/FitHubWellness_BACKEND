@@ -35,7 +35,7 @@ public class EvaluationAPI {
         try {
             String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(evaluationDTO.getUserId().getUserId());
-            EvaluationDTO createdEvaluation = evaluationBL.createEvaluation(evaluationDTO, user, clientIp);
+            EvaluationDTO createdEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user, clientIp);
             LOGGER.info("Se creó la evaluación exitosamente");
             return ResponseEntity.ok(createdEvaluation);
         } catch (RuntimeException e) {
@@ -51,7 +51,7 @@ public class EvaluationAPI {
         try {
             String clientIp = getClientIp(request);
             UserEntity user = userBL.findUserById(userId);
-            EvaluationDTO updatedEvaluation = evaluationBL.updateEvaluation(evaluationDTO, user, clientIp);
+            EvaluationDTO updatedEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user, clientIp);
             LOGGER.info("Se actualizó la evaluación exitosamente");
             return ResponseEntity.ok(updatedEvaluation);
         } catch (Exception e) {
