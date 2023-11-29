@@ -3,7 +3,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "exerciseName": "Sentadillas",
+    "exerciseName": "assisted chest dip (kneeling)",
     "weight": 60.0,
-    "repetitions": 10
+    "repetitions": 20
 }

@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import bo.edu.ucb.fithubwelness.entity.GoalEntity;
 
 public interface GoalDAO extends JpaRepository<GoalEntity, Integer> {
-    List<GoalEntity> findByUserId_UserId(int userId);    
+    List<GoalEntity> findByUserId_UserId(int userId);
+    GoalEntity findByGoalId(Integer goalId);   
 }

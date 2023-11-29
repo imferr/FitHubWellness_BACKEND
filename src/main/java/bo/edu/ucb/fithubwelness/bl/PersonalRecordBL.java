@@ -13,14 +13,15 @@ import bo.edu.ucb.fithubwelness.entity.UserEntity;
 
 @Service
 public class PersonalRecordBL {
-
     private final PersonalRecordDAO personalRecordDAO;
     private final ExerciseBL exerciseBL;
+    private final GoalBL goalBL;
 
     @Autowired
-    public PersonalRecordBL(PersonalRecordDAO personalRecordDAO, ExerciseBL exerciseBL) {
+    public PersonalRecordBL(PersonalRecordDAO personalRecordDAO, ExerciseBL exerciseBL, GoalBL goalBL) {
         this.personalRecordDAO = personalRecordDAO;
         this.exerciseBL = exerciseBL;
+        this.goalBL = goalBL;
     }
 
     public PersonalRecordDTO createPersonalRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
@@ -38,21 +39,13 @@ public class PersonalRecordBL {
         entity.setExerciseName(personalRecordDTO.getExerciseName());
         entity.setUserId(user);
         entity = personalRecordDAO.save(entity);
+        goalBL.checkAndAccomplishGoals(user, this);
         return convertToDTO(entity);
     }
 
-    public PersonalRecordDTO convertToDTO(PersonalRecordEntity entity) {
-        return new PersonalRecordDTO(
-                entity.getPersonalRecordId(),
-                entity.getWeight(),
-                entity.getRepetitions(),
-                entity.getDate(),
-                entity.getExerciseName(),
-                null);
-    }
-
     public PersonalRecordDTO updatePersonalRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
-        PersonalRecordEntity existingPersonalRecord = personalRecordDAO.findByPersonalRecordId(personalRecordDTO.getPersonalRecordId());
+        PersonalRecordEntity existingPersonalRecord = personalRecordDAO
+                .findByPersonalRecordId(personalRecordDTO.getPersonalRecordId());
         if (existingPersonalRecord == null) {
             throw new RuntimeException("No se encontró un registro personal para actualizar.");
         }
@@ -61,16 +54,8 @@ public class PersonalRecordBL {
         String nextExerciseName = findNextExerciseName(personalRecordDTO.getExerciseName());
         existingPersonalRecord.setExerciseName(nextExerciseName);
         personalRecordDAO.save(existingPersonalRecord);
+        goalBL.checkAndAccomplishGoals(user, this);
         return convertToDTO(existingPersonalRecord);
-    }
-
-    public List<PersonalRecordDTO> findAllPersonalRecordsByUserId(int userId) {
-        List<PersonalRecordEntity> personalRecords = personalRecordDAO.findByUserIdUserId(userId);
-        List<PersonalRecordDTO> personalRecordsDTO = new ArrayList<>();
-        for (PersonalRecordEntity personalRecord : personalRecords) {
-            personalRecordsDTO.add(convertToDTO(personalRecord));
-        }
-        return personalRecordsDTO;
     }
 
     private boolean checkIfExerciseRecordExists(String exerciseName, UserEntity user) {
@@ -85,5 +70,24 @@ public class PersonalRecordBL {
                 .min(Comparator.comparing(ExerciseDTO::getName))
                 .map(ExerciseDTO::getName)
                 .orElse(currentExerciseName);
+    }
+
+    public PersonalRecordDTO convertToDTO(PersonalRecordEntity entity) {
+        return new PersonalRecordDTO(
+                entity.getPersonalRecordId(),
+                entity.getWeight(),
+                entity.getRepetitions(),
+                entity.getDate(),
+                entity.getExerciseName(),
+                null);
+    }
+
+    public List<PersonalRecordDTO> findAllPersonalRecordsByUserId(int userId) {
+        List<PersonalRecordEntity> personalRecords = personalRecordDAO.findByUserIdUserId(userId);
+        List<PersonalRecordDTO> personalRecordsDTO = new ArrayList<>();
+        for (PersonalRecordEntity personalRecord : personalRecords) {
+            personalRecordsDTO.add(convertToDTO(personalRecord));
+        }
+        return personalRecordsDTO;
     }
 }
