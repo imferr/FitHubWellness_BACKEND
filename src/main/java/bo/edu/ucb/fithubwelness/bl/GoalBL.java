@@ -74,23 +74,17 @@ public class GoalBL {
         List<GoalDTO> goals = findGoalsByUserId(user.getUserId());
         List<PersonalRecordDTO> personalRecords = personalRecordBL.findAllPersonalRecordsByUserId(user.getUserId());
         for (GoalDTO goal : goals) {
-            if (!goal.getAccomplished()) {
-                for (PersonalRecordDTO record : personalRecords) {
-                    if (record.getExerciseName().equalsIgnoreCase(goal.getExerciseName())) {
-                        if ((goal.getTypeGoalId().getTypeGoalId() == 1 && record.getWeight() >= goal.getQuantity()) ||
-                                (goal.getTypeGoalId().getTypeGoalId() == 2
-                                        && record.getRepetitions() >= goal.getQuantity())) {
-                            goal.setAccomplished(true);
-                            updateGoal(goal);
-                            break;
-                        }
-                    }
+            if (!goal.getAccomplished() && goal.getTypeGoalId().getTypeGoalId() == 3) {
+                PersonalRecordDTO latestRecord = personalRecords.get(0);
+                if (latestRecord.getWeight() <= goal.getQuantity()) {
+                    goal.setAccomplished(true);
+                    updateGoal(goal);
                 }
             }
         }
     }
 
-    private void updateGoal(GoalDTO goalDTO) {
+    public void updateGoal(GoalDTO goalDTO) {
         GoalEntity entity = goalDAO.findByGoalId(goalDTO.getGoalId());
         entity.setAccomplished(goalDTO.getAccomplished());
         goalDAO.save(entity);
