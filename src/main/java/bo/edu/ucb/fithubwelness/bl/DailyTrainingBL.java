@@ -52,7 +52,42 @@ public class DailyTrainingBL {
         TypeTrainingDTO typeTrainingDTO = new TypeTrainingDTO();
         typeTrainingDTO.setTypeTrainingId(typeTrainingEntity.get().getTypeTrainingId());
         typeTrainingDTO.setTypeTraining(typeTrainingEntity.get().getTypeTraining());
-        resultDTO.setTypeTraining(typeTrainingDTO);
+        resultDTO.setTypeTrainingId(typeTrainingDTO);
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(userEntity.get().getUserId());
+        resultDTO.setUserId(userDTO);
+
+        return resultDTO;
+    }
+
+    public DailyTrainingDTO updateDailyTraining(int userId, int dailyTrainingId, int typeTrainingId) {
+        Optional<DailyTrainingEntity> dailyTrainingEntityOptional = dailyTrainingDAO.findById(dailyTrainingId);
+        if (!dailyTrainingEntityOptional.isPresent()) {
+            throw new RuntimeException("No se encontró el entrenamiento diario con ID " + dailyTrainingId);
+        }
+
+        DailyTrainingEntity entity = dailyTrainingEntityOptional.get();
+        entity.setDate(new java.sql.Date(System.currentTimeMillis()));
+
+        Optional<TypeTrainingEntity> typeTrainingEntity = typeTrainingDAO.findById(typeTrainingId);
+        entity.setTypeTrainingId(typeTrainingEntity.orElseThrow(
+                () -> new RuntimeException("No se encontró el tipo de entrenamiento con ID " + typeTrainingId)));
+
+        Optional<UserEntity> userEntity = userDAO.findById(userId);
+        entity.setUserId(
+                userEntity.orElseThrow(() -> new RuntimeException("No se encontró el usuario con ID " + userId)));
+
+        DailyTrainingEntity result = dailyTrainingDAO.save(entity);
+
+        DailyTrainingDTO resultDTO = new DailyTrainingDTO();
+        resultDTO.setDailyTrainingId(result.getDailyTrainingId());
+        resultDTO.setDate(result.getDate());
+
+        TypeTrainingDTO typeTrainingDTO = new TypeTrainingDTO();
+        typeTrainingDTO.setTypeTrainingId(typeTrainingEntity.get().getTypeTrainingId());
+        typeTrainingDTO.setTypeTraining(typeTrainingEntity.get().getTypeTraining());
+        resultDTO.setTypeTrainingId(typeTrainingDTO);
 
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(userEntity.get().getUserId());

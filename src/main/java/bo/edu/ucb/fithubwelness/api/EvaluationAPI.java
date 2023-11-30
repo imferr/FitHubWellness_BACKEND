@@ -31,15 +31,15 @@ public class EvaluationAPI {
     @PostMapping("/create")
     public ResponseEntity<EvaluationDTO> createEvaluation(@RequestBody EvaluationDTO evaluationDTO,
             HttpServletRequest request) {
-        LOGGER.info("Inicio de creación de evaluación");
-        try {
-            String clientIp = getClientIp(request);
-            UserEntity user = userBL.findUserById(evaluationDTO.getUserId().getUserId());
-            EvaluationDTO createdEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user, clientIp);
-            LOGGER.info("Se creó la evaluación exitosamente");
+        int userId = evaluationDTO.getUserId().getUserId();
+        UserEntity user = userBL.findUserById(userId);
+        LOGGER.info("Creando una nueva evaluación para el usuario con ID: " + userId);
+        EvaluationDTO createdEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user);
+        if (createdEvaluation != null) {
+            LOGGER.info("Evaluación creada con éxito para el usuario con ID: " + userId);
             return ResponseEntity.ok(createdEvaluation);
-        } catch (RuntimeException e) {
-            LOGGER.info("Ocurrió un error al crear la evaluación");
+        } else {
+            LOGGER.warning("Error al crear la evaluación para el usuario con ID: " + userId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -47,30 +47,16 @@ public class EvaluationAPI {
     @PutMapping("/update/{userId}")
     public ResponseEntity<EvaluationDTO> updateEvaluation(@PathVariable int userId,
             @RequestBody EvaluationDTO evaluationDTO, HttpServletRequest request) {
-        LOGGER.info("Inicio de actualización de evaluación");
-        try {
-            String clientIp = getClientIp(request);
-            UserEntity user = userBL.findUserById(userId);
-            EvaluationDTO updatedEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user, clientIp);
-            LOGGER.info("Se actualizó la evaluación exitosamente");
+        UserEntity user = userBL.findUserById(userId);
+        LOGGER.info("Actualizando la evaluación para el usuario con ID: " + userId);
+        EvaluationDTO updatedEvaluation = evaluationBL.createOrUpdateEvaluation(evaluationDTO, user);
+        if (updatedEvaluation != null) {
+            LOGGER.info("Evaluación actualizada con éxito para el usuario con ID: " + userId);
             return ResponseEntity.ok(updatedEvaluation);
-        } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al actualizar la evaluación");
+        } else {
+            LOGGER.warning("Error al actualizar la evaluación para el usuario con ID: " + userId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        } finally {
-            LOGGER.info("Fin de actualización de evaluación");
         }
-    }
-
-    private String getClientIp(HttpServletRequest request) {
-        String remoteAddr = "";
-        if (request != null) {
-            remoteAddr = request.getHeader("X-FORWARDED-FOR");
-            if (remoteAddr == null || "".equals(remoteAddr)) {
-                remoteAddr = request.getRemoteAddr();
-            }
-        }
-        return remoteAddr;
     }
 
     @GetMapping("/user/{userId}")
@@ -88,7 +74,8 @@ public class EvaluationAPI {
         } catch (RuntimeException e) {
             LOGGER.info("Ocurrió un error al buscar la evaluación");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } finally {
+            LOGGER.info("Fin de búsqueda de evaluación por ID de usuario");
         }
     }
-
 }

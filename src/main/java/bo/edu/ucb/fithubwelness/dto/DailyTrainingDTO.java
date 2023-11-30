@@ -6,16 +6,16 @@ public class DailyTrainingDTO {
 
     private int dailyTrainingId;
     private Date date;
-    private TypeTrainingDTO typeTraining;
+    private TypeTrainingDTO typeTrainingId;
     private UserDTO userId;
 
     public DailyTrainingDTO() {
     }
 
-    public DailyTrainingDTO(int dailyTrainingId, Date date, TypeTrainingDTO typeTraining, UserDTO userId) {
+    public DailyTrainingDTO(int dailyTrainingId, Date date, TypeTrainingDTO typeTrainingId, UserDTO userId) {
         this.dailyTrainingId = dailyTrainingId;
         this.date = date;
-        this.typeTraining = typeTraining;
+        this.typeTrainingId = typeTrainingId;
         this.userId = userId;
     }
 
@@ -29,8 +29,8 @@ public class DailyTrainingDTO {
         return date;
     }
 
-    public TypeTrainingDTO getTypeTraining() {
-        return typeTraining;
+    public TypeTrainingDTO getTypeTrainingId() {
+        return typeTrainingId;
     }
 
     public UserDTO getUserId() {
@@ -47,8 +47,8 @@ public class DailyTrainingDTO {
         this.date = date;
     }
 
-    public void setTypeTraining(TypeTrainingDTO typeTraining) {
-        this.typeTraining = typeTraining;
+    public void setTypeTrainingId(TypeTrainingDTO typeTrainingId) {
+        this.typeTrainingId = typeTrainingId;
     }
 
     public void setUserId(UserDTO userId) {
@@ -62,7 +62,7 @@ public class DailyTrainingDTO {
         return "DailyTrainingDTO{" + 
                 "dailyTrainingId=" + dailyTrainingId + 
                 ", date=" + date + 
-                ", typeTraining=" + typeTraining + 
+                ", typeTrainingId=" + typeTrainingId +
                 ", userId=" + userId + 
                 '}';
     }
