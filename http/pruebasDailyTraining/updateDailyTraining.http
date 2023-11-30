@@ -1,0 +1,8 @@
+PUT http://localhost:8080/api/v1/dailytraining/update
+Content-Type: application/json
+Accept: application/json
+
+{
+    "userId": 1,
+    "typeTrainingId": 2
+}

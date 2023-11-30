@@ -121,7 +121,6 @@ public class EvaluationBL {
         historyEntity.setDate(evaluationEntity.getDate());
         historyEntity.setImc(evaluationEntity.getImc());
         historyEntity.setState(evaluationEntity.getState());
-        historyEntity.setUserId(evaluationEntity.getUserId());
         historyEntity.setAudDate(new Timestamp(System.currentTimeMillis()));
         historyEntity.setAudHost(host);
         historyEntity.setAudUser(userId);

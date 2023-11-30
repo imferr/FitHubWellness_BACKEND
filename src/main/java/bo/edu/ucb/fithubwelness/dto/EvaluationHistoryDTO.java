@@ -11,7 +11,6 @@ public class EvaluationHistoryDTO {
     private Date date;
     private Double imc;
     private String state;
-    private UserDTO userId;
     private Timestamp audDate;
     private String audHost;
     private Integer audUser;
@@ -20,14 +19,13 @@ public class EvaluationHistoryDTO {
     }
 
     public EvaluationHistoryDTO(int evaluationId, Double weight, int height, Date date, Double imc, String state,
-            UserDTO userId, Timestamp audDate, String audHost, Integer audUser) {
+            Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
         this.date = date;
         this.imc = imc;
         this.state = state;
-        this.userId = userId;
         this.audDate = audDate;
         this.audHost = audHost;
         this.audUser = audUser;
@@ -57,10 +55,6 @@ public class EvaluationHistoryDTO {
 
     public String getState() {
         return state;
-    }
-
-    public UserDTO getUserId() {
-        return userId;
     }
 
     public Timestamp getAudDate() {
@@ -101,10 +95,6 @@ public class EvaluationHistoryDTO {
         this.state = state;
     }
 
-    public void setUserId(UserDTO userId) {
-        this.userId = userId;
-    }
-
     public void setAudDate(Timestamp audDate) {
         this.audDate = audDate;
     }
@@ -128,7 +118,6 @@ public class EvaluationHistoryDTO {
                 ", date=" + date +
                 ", imc=" + imc +
                 ", state='" + state + '\'' +
-                ", userId=" + userId +
                 ", audDate=" + audDate +
                 ", audHost='" + audHost + '\'' +
                 ", audUser='" + audUser + '\'' +

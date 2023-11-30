@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "evaluation_history")
+@Table(name = "h_evaluation")
 public class EvaluationHistoryEntity {
 
     @Id
@@ -28,10 +28,6 @@ public class EvaluationHistoryEntity {
     @Column(name = "estado", nullable = false)
     private String state;
 
-    @ManyToOne
-    @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
-    private UserEntity userId;
-
     @Column(name = "aud_date", nullable = false)
     private Timestamp audDate;
 
@@ -44,15 +40,13 @@ public class EvaluationHistoryEntity {
     public EvaluationHistoryEntity() {
     }
 
-    public EvaluationHistoryEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc,
-            String state, UserEntity userId, Timestamp audDate, String audHost, Integer audUser) {
+    public EvaluationHistoryEntity(Integer evaluationId, Double weight, Integer height, Date date, Double imc, String state, Timestamp audDate, String audHost, Integer audUser) {
         this.evaluationId = evaluationId;
         this.weight = weight;
         this.height = height;
         this.date = date;
         this.imc = imc;
         this.state = state;
-        this.userId = userId;
         this.audDate = audDate;
         this.audHost = audHost;
         this.audUser = audUser;
@@ -82,10 +76,6 @@ public class EvaluationHistoryEntity {
 
     public String getState() {
         return state;
-    }
-
-    public UserEntity getUserId() {
-        return userId;
     }
 
     public Timestamp getAudDate() {
@@ -126,10 +116,6 @@ public class EvaluationHistoryEntity {
         this.state = state;
     }
 
-    public void setUserId(UserEntity userId) {
-        this.userId = userId;
-    }
-
     public void setAudDate(Timestamp audDate) {
         this.audDate = audDate;
     }
@@ -151,7 +137,6 @@ public class EvaluationHistoryEntity {
                 ", date=" + date +
                 ", imc=" + imc +
                 ", state='" + state + '\'' +
-                ", userId=" + userId +
                 ", audDate=" + audDate +
                 ", audHost='" + audHost + '\'' +
                 ", audUser='" + audUser + '\'' +
