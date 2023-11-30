@@ -22,14 +22,19 @@ public class ChatGptResponseEntity {
     @JoinColumn(name = "daily_training_dailyid", referencedColumnName = "dailyid", nullable = false)
     private DailyTrainingEntity dailyTrainingId;
 
+    @ManyToOne
+    @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
+    private UserEntity userId;
+
     public ChatGptResponseEntity() {
     }
 
-    public ChatGptResponseEntity(Integer chatId, String response, EvaluationEntity evaluationId, DailyTrainingEntity dailyTrainingId) {
+    public ChatGptResponseEntity(Integer chatId, String response, EvaluationEntity evaluationId, DailyTrainingEntity dailyTrainingId, UserEntity userId) {
         this.chatId = chatId;
         this.response = response;
         this.evaluationId = evaluationId;
         this.dailyTrainingId = dailyTrainingId;
+        this.userId = userId;
     }
 
     //getters:
@@ -50,6 +55,10 @@ public class ChatGptResponseEntity {
         return dailyTrainingId;
     }
 
+    public UserEntity getUserId() {
+        return userId;
+    }
+
     //setters:
 
     public void setChatId(int chatId) {
@@ -68,6 +77,10 @@ public class ChatGptResponseEntity {
         this.dailyTrainingId = dailyTrainingId;
     }
 
+    public void setUserId(UserEntity userId) {
+        this.userId = userId;
+    }
+
     //toString:
 
     @Override
@@ -77,6 +90,7 @@ public class ChatGptResponseEntity {
                 ", response='" + response + '\'' + 
                 ", evaluationId=" + evaluationId + 
                 ", dailyTrainingId=" + dailyTrainingId + 
+                ", userId=" + userId +
                 '}';
     }
 }

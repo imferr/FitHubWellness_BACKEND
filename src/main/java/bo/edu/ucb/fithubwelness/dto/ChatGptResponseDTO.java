@@ -6,15 +6,17 @@ public class ChatGptResponseDTO {
     private String response;
     private EvaluationDTO evaluation;
     private DailyTrainingDTO dailyTraining;
+    private UserDTO userId;
 
     public ChatGptResponseDTO() {
     }
 
-    public ChatGptResponseDTO(int chatId, String response, EvaluationDTO evaluation, DailyTrainingDTO dailyTraining) {
+    public ChatGptResponseDTO(int chatId, String response, EvaluationDTO evaluation, DailyTrainingDTO dailyTraining, UserDTO userId) {
         this.chatId = chatId;
         this.response = response;
         this.evaluation = evaluation;
         this.dailyTraining = dailyTraining;
+        this.userId = userId;
     }
 
     //getters:
@@ -35,6 +37,10 @@ public class ChatGptResponseDTO {
         return dailyTraining;
     }
 
+    public UserDTO getUserId() {
+        return userId;
+    }
+
     //setters:
 
     public void setChatId(int chatId) {
@@ -53,6 +59,10 @@ public class ChatGptResponseDTO {
         this.dailyTraining = dailyTraining;
     }
 
+    public void setUserId(UserDTO userId) {
+        this.userId = userId;
+    }
+
     //toString:
 
     @Override
@@ -62,6 +72,7 @@ public class ChatGptResponseDTO {
                 ", response=" + response + 
                 ", evaluation=" + evaluation + 
                 ", dailyTraining=" + dailyTraining + 
+                ", userId=" + userId +
                 '}';
     }
 }
