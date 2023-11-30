@@ -9,4 +9,3 @@ public interface DailyTrainingDAO extends JpaRepository<DailyTrainingEntity, Int
     List<DailyTrainingEntity> findByUserIdUserId(int userId);
 }
 
-

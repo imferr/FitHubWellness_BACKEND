@@ -1,17 +1,14 @@
 package bo.edu.ucb.fithubwelness.bl;
 
 import bo.edu.ucb.fithubwelness.dao.EvaluationDAO;
-import bo.edu.ucb.fithubwelness.dao.EvaluationHistoryDAO;
 import bo.edu.ucb.fithubwelness.dao.LastEvaluationDAO;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
 import bo.edu.ucb.fithubwelness.dto.GoalDTO;
 import bo.edu.ucb.fithubwelness.entity.EvaluationEntity;
-import bo.edu.ucb.fithubwelness.entity.EvaluationHistoryEntity;
 import bo.edu.ucb.fithubwelness.entity.LastEvaluationEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -19,19 +16,16 @@ public class EvaluationBL {
 
     private final EvaluationDAO evaluationDAO;
     private final GoalBL goalBL;
-    private final EvaluationHistoryDAO evaluationHistoryDAO;
     private final LastEvaluationDAO lastEvaluationDAO;
 
     @Autowired
-    public EvaluationBL(EvaluationDAO evaluationDAO, GoalBL goalBL, EvaluationHistoryDAO evaluationHistoryDAO,
-            LastEvaluationDAO lastEvaluationDAO) {
+    public EvaluationBL(EvaluationDAO evaluationDAO, GoalBL goalBL, LastEvaluationDAO lastEvaluationDAO) {
         this.evaluationDAO = evaluationDAO;
         this.goalBL = goalBL;
-        this.evaluationHistoryDAO = evaluationHistoryDAO;
         this.lastEvaluationDAO = lastEvaluationDAO;
     }
 
-    public EvaluationDTO createOrUpdateEvaluation(EvaluationDTO evaluationDTO, UserEntity user, String host) {
+    public EvaluationDTO createOrUpdateEvaluation(EvaluationDTO evaluationDTO, UserEntity user) {
         EvaluationEntity existingEvaluation = evaluationDAO.findByUserId(user);
         boolean isUpdate = existingEvaluation != null;
         if (isUpdate) {
@@ -39,7 +33,6 @@ public class EvaluationBL {
         } else {
             existingEvaluation = createNewEvaluation(evaluationDTO, user);
         }
-        updateEvaluationHistory(existingEvaluation, host, user.getUserId());
         updateLastEvaluation(existingEvaluation, user, isUpdate);
         return convertToDTO(existingEvaluation);
     }
@@ -112,19 +105,6 @@ public class EvaluationBL {
                 entity.getImc(),
                 entity.getState(),
                 null);
-    }
-
-    private void updateEvaluationHistory(EvaluationEntity evaluationEntity, String host, Integer userId) {
-        EvaluationHistoryEntity historyEntity = new EvaluationHistoryEntity();
-        historyEntity.setWeight(evaluationEntity.getWeight());
-        historyEntity.setHeight(evaluationEntity.getHeight());
-        historyEntity.setDate(evaluationEntity.getDate());
-        historyEntity.setImc(evaluationEntity.getImc());
-        historyEntity.setState(evaluationEntity.getState());
-        historyEntity.setAudDate(new Timestamp(System.currentTimeMillis()));
-        historyEntity.setAudHost(host);
-        historyEntity.setAudUser(userId);
-        evaluationHistoryDAO.save(historyEntity);
     }
 
     private GoalDTO findActiveType3Goal(int userId) {

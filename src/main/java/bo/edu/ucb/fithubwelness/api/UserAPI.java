@@ -56,27 +56,15 @@ public class UserAPI {
         try {
             UserDTO userDTO = objectMapper.convertValue(requestData.get("user"), UserDTO.class);
             EvaluationDTO evaluationDTO = objectMapper.convertValue(requestData.get("evaluation"), EvaluationDTO.class);
-            String clientIp = getClientIp(request);
-            UserDTO createdUser = userBL.createUserWithEvaluation(userDTO, evaluationDTO, clientIp);
+            UserDTO createdUser = userBL.createUserWithEvaluation(userDTO, evaluationDTO);
             LOGGER.info("Usuario creado exitosamente");
             return ResponseEntity.ok(createdUser);
         } catch (Exception e) {
-            LOGGER.info("Ocurrió un error al crear el usuario");
+            LOGGER.info("Ocurrió un error al crear el usuario" + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } finally {
             LOGGER.info("Finalizando el proceso de creación de usuario con evaluación");
         }
-    }
-
-    private String getClientIp(HttpServletRequest request) {
-        String remoteAddr = "";
-        if (request != null) {
-            remoteAddr = request.getHeader("X-FORWARDED-FOR");
-            if (remoteAddr == null || "".equals(remoteAddr)) {
-                remoteAddr = request.getRemoteAddr();
-            }
-        }
-        return remoteAddr;
     }
 
     @GetMapping("/{userId}")

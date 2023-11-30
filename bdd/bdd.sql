@@ -181,7 +181,6 @@ CREATE TABLE H_EVALUATION (
     imc numeric(10,5)  NOT NULL,
     estado varchar(30)  NOT NULL,
     aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    aud_host varchar(100),
     aud_user integer NOT NULL,
     CONSTRAINT H_EVALUATION_pk PRIMARY KEY (evaluationId, aud_date)
 );
@@ -193,7 +192,51 @@ CREATE TABLE H_DAILY_TRAINING (
     date date  NOT NULL,
     typeTrainingId integer NOT NULL,
     aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    aud_host varchar(100),
     aud_user integer NOT NULL,
     CONSTRAINT H_DAILY_TRAINING_pk PRIMARY KEY (dailyId, aud_date)
 );
+
+
+
+-- Trigger para la tabla EVALUATION
+CREATE OR REPLACE FUNCTION evaluation_after_insert_or_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO H_EVALUATION (evaluationId, weight, height, date, imc, estado, aud_date, aud_user)
+        VALUES (NEW.evaluationId, NEW.weight, NEW.height, NEW.date, NEW.imc, NEW.estado, CURRENT_TIMESTAMP, NEW.USERS_userId);
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO H_EVALUATION (evaluationId, weight, height, date, imc, estado, aud_date, aud_user)
+        VALUES (NEW.evaluationId, NEW.weight, NEW.height, NEW.date, NEW.imc, NEW.estado, CURRENT_TIMESTAMP, NEW.USERS_userId);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER evaluation_after_insert_or_update
+AFTER INSERT OR UPDATE ON EVALUATION
+FOR EACH ROW
+EXECUTE FUNCTION evaluation_after_insert_or_update();
+
+
+
+
+-- Trigger para la tabla DAILY_TRAINING
+CREATE OR REPLACE FUNCTION daily_training_after_insert_or_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO H_DAILY_TRAINING (dailyId, date, typeTrainingId, aud_date, aud_user)
+        VALUES (NEW.dailyId, NEW.date, NEW.TYPE_TRAINING_typeTrainingId, CURRENT_TIMESTAMP, NEW.USERS_userId);
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO H_DAILY_TRAINING (dailyId, date, typeTrainingId, aud_date, aud_user)
+        VALUES (NEW.dailyId, NEW.date, NEW.TYPE_TRAINING_typeTrainingId, CURRENT_TIMESTAMP, NEW.USERS_userId);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER daily_training_after_insert_or_update
+AFTER INSERT OR UPDATE ON DAILY_TRAINING
+FOR EACH ROW
+EXECUTE FUNCTION daily_training_after_insert_or_update();
