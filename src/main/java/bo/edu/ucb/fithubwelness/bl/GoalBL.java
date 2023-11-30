@@ -73,12 +73,39 @@ public class GoalBL {
     public void checkAndAccomplishGoals(UserEntity user, PersonalRecordBL personalRecordBL) {
         List<GoalDTO> goals = findGoalsByUserId(user.getUserId());
         List<PersonalRecordDTO> personalRecords = personalRecordBL.findAllPersonalRecordsByUserId(user.getUserId());
+
         for (GoalDTO goal : goals) {
-            if (!goal.getAccomplished() && goal.getTypeGoalId().getTypeGoalId() == 3) {
-                PersonalRecordDTO latestRecord = personalRecords.get(0);
-                if (latestRecord.getWeight() <= goal.getQuantity()) {
-                    goal.setAccomplished(true);
-                    updateGoal(goal);
+            if (!goal.getAccomplished()) {
+                switch (goal.getTypeGoalId().getTypeGoalId()) {
+                    case 1:
+                        for (PersonalRecordDTO record : personalRecords) {
+                            if (record.getWeight() == goal.getQuantity()
+                                    && record.getExerciseName().equals(goal.getExerciseName())) {
+                                goal.setAccomplished(true);
+                                updateGoal(goal);
+                                break;
+                            }
+                        }
+                        break;
+                    case 2:
+                        for (PersonalRecordDTO record : personalRecords) {
+                            if (record.getRepetitions() == goal.getQuantity()
+                                    && record.getExerciseName().equals(goal.getExerciseName())) {
+                                goal.setAccomplished(true);
+                                updateGoal(goal);
+                                break;
+                            }
+                        }
+                        break;
+                    case 3:
+                        PersonalRecordDTO latestRecord = personalRecords.get(0);
+                        if (latestRecord.getWeight() <= goal.getQuantity()) {
+                            goal.setAccomplished(true);
+                            updateGoal(goal);
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }

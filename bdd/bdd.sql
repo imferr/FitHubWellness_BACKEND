@@ -173,17 +173,27 @@ ALTER TABLE LAST_EVALUATION ADD CONSTRAINT LAST_EVALUATION_USERS
 
 --TABLA HISTORICA EVALUATION
 
-CREATE TABLE EVALUATION_HISTORY (
+CREATE TABLE H_EVALUATION (
     evaluationId Serial  NOT NULL,
     weight numeric(10,5)  NOT NULL,
     height int  NOT NULL,
     date date  NOT NULL,
     imc numeric(10,5)  NOT NULL,
     estado varchar(30)  NOT NULL,
-    USERS_userId Serial  NOT NULL,
     aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     aud_host varchar(100),
     aud_user integer NOT NULL,
-    CONSTRAINT EVALUATION_HISTORY_pk PRIMARY KEY (evaluationId, aud_date)
+    CONSTRAINT H_EVALUATION_pk PRIMARY KEY (evaluationId, aud_date)
 );
 
+-- TABLA HISTORICA DAYLY_TRAINING
+
+CREATE TABLE H_DAILY_TRAINING (
+    dailyId Serial  NOT NULL,
+    date date  NOT NULL,
+    typeTrainingId integer NOT NULL,
+    aud_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    aud_host varchar(100),
+    aud_user integer NOT NULL,
+    CONSTRAINT H_DAILY_TRAINING_pk PRIMARY KEY (dailyId, aud_date)
+);
