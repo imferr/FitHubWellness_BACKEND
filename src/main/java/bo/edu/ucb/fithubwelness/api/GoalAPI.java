@@ -74,4 +74,24 @@ public class GoalAPI {
             LOGGER.info("Finalizando el proceso de búsqueda de objetivos por id de usuario");
         }
     }
+
+    @GetMapping("/last-accomplished/{userId}")
+    public ResponseEntity<?> findLastAccomplishedGoal(@PathVariable int userId) {
+        LOGGER.info("Iniciando el proceso de búsqueda del último objetivo cumplido por id de usuario");
+        try {
+            GoalDTO lastAccomplishedGoal = goalBL.findLastAccomplishedGoal(userId);
+            if (lastAccomplishedGoal == null) {
+                LOGGER.info("No se encontró ningún objetivo cumplido");
+                return new ResponseEntity<>("No se encontró ningún objetivo cumplido", HttpStatus.NOT_FOUND);
+            }
+            LOGGER.info("Último objetivo cumplido encontrado con éxito");
+            return ResponseEntity.ok(lastAccomplishedGoal);
+        } catch (Exception e) {
+            LOGGER.info("Ocurrió un error al buscar el último objetivo cumplido: " + e.getMessage() + e.getCause()
+                    + e.getClass());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            LOGGER.info("Finalizando el proceso de búsqueda del último objetivo cumplido por id de usuario");
+        }
+    }
 }

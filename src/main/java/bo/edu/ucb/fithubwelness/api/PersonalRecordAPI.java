@@ -89,10 +89,31 @@ public class PersonalRecordAPI {
         LOGGER.info("Obteniendo Personal Record con ID: " + recordId);
         try {
             PersonalRecordDTO record = personalRecordBL.findPersonalRecordById(recordId);
+            LOGGER.info("Personal Record obtenido con éxito");
             return ResponseEntity.ok(record);
         } catch (Exception e) {
             LOGGER.severe("Error al obtener Personal Record: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } finally {
+            LOGGER.info("Fin de obtención de Personal Record");
+        }
+    }
+
+    @GetMapping("/latest/user/{userId}")
+    public ResponseEntity<PersonalRecordDTO> getLatestPersonalRecordByUserId(@PathVariable int userId) {
+        LOGGER.info("Inicio de obtención del último personal record para el usuario con ID: " + userId);
+        try {
+            PersonalRecordDTO latestRecord = personalRecordBL.findLatestPersonalRecordByUserId(userId);
+            LOGGER.info("Último personal record obtenido con éxito");
+            return ResponseEntity.ok(latestRecord);
+        } catch (RuntimeException e) {
+            LOGGER.severe("Error al obtener el último personal record: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            LOGGER.severe("Error interno al obtener el último personal record: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            LOGGER.info("Fin de obtención del último personal record");
         }
     }
 
