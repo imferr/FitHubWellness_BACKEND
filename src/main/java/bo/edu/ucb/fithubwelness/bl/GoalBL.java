@@ -164,4 +164,15 @@ public class GoalBL {
         }
     }
 
+    public GoalDTO findLastAccomplishedGoal(int userId) { // Busca el último objetivo cumplido
+        List<GoalDTO> goals = findGoalsByUserId(userId);
+        for (int i = goals.size() - 1; i >= 0; i--) {
+            GoalDTO goal = goals.get(i);
+            if (goal.getAccomplished()) {
+                return goal;
+            }
+        }
+        return null; // Retorna null si no se encuentra ninguno cumplido
+    }
+
 }

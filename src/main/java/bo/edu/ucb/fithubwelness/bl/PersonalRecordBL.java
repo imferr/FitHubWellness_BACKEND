@@ -1,6 +1,7 @@
 package bo.edu.ucb.fithubwelness.bl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,4 +94,18 @@ public class PersonalRecordBL {
         }
         return convertToDTO(record);
     }
+
+    public PersonalRecordDTO findLatestPersonalRecordByUserId(int userId) {
+        List<PersonalRecordEntity> personalRecords = personalRecordDAO.findByUserIdUserId(userId);
+        if (personalRecords.isEmpty()) {
+            throw new RuntimeException("No se encontraron registros personales para el usuario con ID: " + userId);
+        }
+
+        PersonalRecordEntity latestRecord = personalRecords.stream()
+                .max(Comparator.comparing(PersonalRecordEntity::getDate))
+                .orElseThrow(() -> new RuntimeException("Error al encontrar el registro personal más reciente"));
+
+        return convertToDTO(latestRecord);
+    }
+
 }
