@@ -37,7 +37,7 @@ public class GoalAPI {
     }
 
     @PostMapping("/create/user/{userId}/typeGoal/{typeGoalId}")
-    public ResponseEntity<GoalDTO> createGoal(@PathVariable int userId, @PathVariable int typeGoalId,
+    public ResponseEntity<?> createGoal(@PathVariable int userId, @PathVariable int typeGoalId,
             @RequestBody GoalDTO goalDTO, HttpServletRequest request) {
         LOGGER.info("Iniciando el proceso de creación de objetivo");
         try {
@@ -45,6 +45,9 @@ public class GoalAPI {
             TypeGoalEntity typeGoal = typeGoalBL.findTypeGoalById(typeGoalId);
             goalDTO.setUserId(new UserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getBirthday()));
             goalDTO.setTypeGoalId(new TypeGoalDTO(typeGoal.getTypeGoalId(), typeGoal.getTypeGoal()));
+            if (goalBL.goalExists(goalDTO)) {
+                return new ResponseEntity<>("Un objetivo con los mismos parámetros ya existe.", HttpStatus.BAD_REQUEST);
+            }
             GoalDTO createdGoal = goalBL.createGoal(goalDTO, user, typeGoal);
             LOGGER.info("Objetivo creado con éxito");
             return ResponseEntity.ok(createdGoal);

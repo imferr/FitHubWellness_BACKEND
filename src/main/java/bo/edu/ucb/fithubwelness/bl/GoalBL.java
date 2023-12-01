@@ -26,6 +26,9 @@ public class GoalBL {
     }
 
     public GoalDTO createGoal(GoalDTO goalDTO, UserEntity user, TypeGoalEntity typeGoal) {
+        if (goalExists(goalDTO)) {
+            throw new RuntimeException("Un objetivo con los mismos parámetros ya existe.");
+        }
         goalDTO.setAccomplished(false);
         if (goalDTO.getTypeGoalId().getTypeGoalId() == 1 || goalDTO.getTypeGoalId().getTypeGoalId() == 2) {
             List<ExerciseDTO> exercises = exerciseBL.findExercisesByName(goalDTO.getExerciseName());
@@ -73,7 +76,6 @@ public class GoalBL {
     public void checkAndAccomplishGoals(UserEntity user, PersonalRecordBL personalRecordBL) {
         List<GoalDTO> goals = findGoalsByUserId(user.getUserId());
         List<PersonalRecordDTO> personalRecords = personalRecordBL.findAllPersonalRecordsByUserId(user.getUserId());
-
         for (GoalDTO goal : goals) {
             if (!goal.getAccomplished()) {
                 switch (goal.getTypeGoalId().getTypeGoalId()) {
@@ -116,4 +118,22 @@ public class GoalBL {
         entity.setAccomplished(goalDTO.getAccomplished());
         goalDAO.save(entity);
     }
+
+    public boolean goalExists(GoalDTO goalDTO) {
+        List<GoalEntity> existingGoals;
+        if (goalDTO.getTypeGoalId().getTypeGoalId() == 3) {
+            existingGoals = goalDAO.findSimilarGoalsForTypeGoalId3(
+                    goalDTO.getUserId().getUserId(),
+                    goalDTO.getTypeGoalId().getTypeGoalId(),
+                    goalDTO.getQuantity());
+        } else {
+            existingGoals = goalDAO.findSimilarGoals(
+                    goalDTO.getUserId().getUserId(),
+                    goalDTO.getTypeGoalId().getTypeGoalId(),
+                    goalDTO.getQuantity(),
+                    goalDTO.getExerciseName());
+        }
+        return !existingGoals.isEmpty();
+    }
+
 }
