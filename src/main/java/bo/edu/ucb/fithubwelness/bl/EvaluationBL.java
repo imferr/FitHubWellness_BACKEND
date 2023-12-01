@@ -124,4 +124,8 @@ public class EvaluationBL {
         }
         return null;
     }
+
+    public EvaluationEntity findEvaluationById(int evaluationId) {
+        return evaluationDAO.findById(evaluationId).orElseThrow(() -> new RuntimeException("No se encontró la evaluación con ID " + evaluationId)); 
+    }
 }

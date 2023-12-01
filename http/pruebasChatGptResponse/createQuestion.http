@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/v1/chatgpt/interact/user/1/evaluation/1/dailytraining/1
+Content-Type: application/json
+Accept: application/json
+
+{
+    "question": "¿Cuál es el mejor ejercicio para bajar de peso?"
+}

@@ -67,6 +67,6 @@ public class UserBL {
     }
 
     public UserEntity findUserById(int userId) {
-        return userDAO.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        return userDAO.findById(userId).orElseThrow(() -> new RuntimeException("No se encontró el usuario con ID " + userId));
     }
 }

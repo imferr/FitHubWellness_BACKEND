@@ -118,4 +118,9 @@ public class DailyTrainingBL {
         }
         return resultList;
     }
+
+    public DailyTrainingEntity findDailyTrainingById(int dailyTrainingId) {
+        return dailyTrainingDAO.findById(dailyTrainingId)
+                .orElseThrow(() -> new RuntimeException("No se encontró el entrenamiento diario con ID " + dailyTrainingId));
+    }
 }
