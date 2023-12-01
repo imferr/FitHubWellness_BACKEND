@@ -11,6 +11,9 @@ public class ChatGptResponseEntity {
     @Column(name = "chatid")
     private Integer chatId;
 
+    @Column(name = "question", nullable = false, length = 5000)
+    private String question;
+
     @Column(name = "response", nullable = false, length = 5000)
     private String response;
 
@@ -29,8 +32,9 @@ public class ChatGptResponseEntity {
     public ChatGptResponseEntity() {
     }
 
-    public ChatGptResponseEntity(Integer chatId, String response, EvaluationEntity evaluationId, DailyTrainingEntity dailyTrainingId, UserEntity userId) {
+    public ChatGptResponseEntity(Integer chatId, String question, String response, EvaluationEntity evaluationId, DailyTrainingEntity dailyTrainingId, UserEntity userId) {
         this.chatId = chatId;
+        this.question = question;
         this.response = response;
         this.evaluationId = evaluationId;
         this.dailyTrainingId = dailyTrainingId;
@@ -41,6 +45,10 @@ public class ChatGptResponseEntity {
 
     public int getChatId() {
         return chatId;
+    }
+
+    public String getQuestion() {
+        return question;
     }
 
     public String getResponse() {
@@ -65,6 +73,10 @@ public class ChatGptResponseEntity {
         this.chatId = chatId;
     }
 
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
     public void setResponse(String response) {
         this.response = response;
     }
@@ -87,6 +99,7 @@ public class ChatGptResponseEntity {
     public String toString() {
         return "ChatGptResponseEntity{" + 
                 "chatId=" + chatId + 
+                ", question='" + question + '\'' +
                 ", response='" + response + '\'' + 
                 ", evaluationId=" + evaluationId + 
                 ", dailyTrainingId=" + dailyTrainingId + 

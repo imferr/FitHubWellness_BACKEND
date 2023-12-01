@@ -7,6 +7,7 @@
 -- Table: CHATGPT_RESPONSE
 CREATE TABLE CHATGPT_RESPONSE (
     chatId Serial  NOT NULL,
+    question varchar(5000)  NOT NULL,
     response varchar(5000)  NOT NULL,
     EVALUATION_evaluationId Serial  NOT NULL,
     DAILY_TRAINING_dailyId Serial  NOT NULL,

@@ -3,6 +3,7 @@ package bo.edu.ucb.fithubwelness.dto;
 public class ChatGptResponseDTO {
     
     private int chatId;
+    private String question;
     private String response;
     private EvaluationDTO evaluation;
     private DailyTrainingDTO dailyTraining;
@@ -11,8 +12,9 @@ public class ChatGptResponseDTO {
     public ChatGptResponseDTO() {
     }
 
-    public ChatGptResponseDTO(int chatId, String response, EvaluationDTO evaluation, DailyTrainingDTO dailyTraining, UserDTO userId) {
+    public ChatGptResponseDTO(int chatId, String question, String response, EvaluationDTO evaluation, DailyTrainingDTO dailyTraining, UserDTO userId) {
         this.chatId = chatId;
+        this.question = question;
         this.response = response;
         this.evaluation = evaluation;
         this.dailyTraining = dailyTraining;
@@ -23,6 +25,10 @@ public class ChatGptResponseDTO {
 
     public int getChatId() {
         return chatId;
+    }
+
+    public String getQuestion() {
+        return question;
     }
 
     public String getResponse() {
@@ -47,6 +53,10 @@ public class ChatGptResponseDTO {
         this.chatId = chatId;
     }
 
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
     public void setResponse(String response) {
         this.response = response;
     }
@@ -69,6 +79,7 @@ public class ChatGptResponseDTO {
     public String toString() {
         return "ChatGptResponseDTO{" + 
                 "chatId=" + chatId + 
+                ", question=" + question +
                 ", response=" + response + 
                 ", evaluation=" + evaluation + 
                 ", dailyTraining=" + dailyTraining + 

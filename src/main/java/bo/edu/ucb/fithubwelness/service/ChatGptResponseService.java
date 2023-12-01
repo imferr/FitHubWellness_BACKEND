@@ -1,9 +1,11 @@
 package bo.edu.ucb.fithubwelness.service;
 
+import bo.edu.ucb.fithubwelness.bl.GoalBL;
 import bo.edu.ucb.fithubwelness.dao.ChatGptResponseDAO;
 import bo.edu.ucb.fithubwelness.dto.ChatGptResponseDTO;
 import bo.edu.ucb.fithubwelness.dto.DailyTrainingDTO;
 import bo.edu.ucb.fithubwelness.dto.EvaluationDTO;
+import bo.edu.ucb.fithubwelness.dto.GoalDTO;
 import bo.edu.ucb.fithubwelness.dto.TypeTrainingDTO;
 import bo.edu.ucb.fithubwelness.dto.UserDTO;
 import bo.edu.ucb.fithubwelness.entity.ChatGptResponseEntity;
@@ -13,6 +15,14 @@ import bo.edu.ucb.fithubwelness.entity.TypeTrainingEntity;
 import bo.edu.ucb.fithubwelness.entity.UserEntity;
 
 import java.util.Map;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,14 +37,29 @@ import org.springframework.web.client.RestTemplate;
 public class ChatGptResponseService {
 
     @Autowired
+    private GoalBL goalBL;
     private ChatGptResponseDAO chatGptResponseDAO;
     private RestTemplate restTemplate = new RestTemplate();
     private final String CHATGPT_API_URL = "https://api.openai.com/v1/engines/gpt-4/completions";
     private final String API_KEY = "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";
+    private Set<Integer> userFirstInteractionSet = new HashSet<>();
 
     public ChatGptResponseDTO getChatGptResponse(UserEntity user, EvaluationEntity evaluation,
             DailyTrainingEntity dailyTraining, String question) {
-        String prompt = "Prompt basado en la pregunta del usuario: " + question;
+        String prompt;
+
+        if (!userFirstInteractionSet.contains(user.getUserId())) {
+            prompt = "Hola " + user.getName() + ", será un gusto ayudarte con tus preguntas. "
+                    + "Considerando tu edad de " + calculateAge(user.getBirthday()) + " años, "
+                    + "tus objetivos de " + getUnfulfilledGoals(user) + ", "
+                    + "tu peso de " + evaluation.getWeight() + " kg, tu altura de " + evaluation.getHeight() + " cm y "
+                    + "el estado en que te encuentras según tu índice de masa corporal que es " + evaluation.getState()
+                    + ".";
+            userFirstInteractionSet.add(user.getUserId());
+        } else {
+            prompt = question;
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(API_KEY);
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(Map.of("prompt", prompt), headers);
@@ -66,6 +91,7 @@ public class ChatGptResponseService {
     private ChatGptResponseDTO convertToDTO(ChatGptResponseEntity entity) {
         return new ChatGptResponseDTO(
                 entity.getChatId(),
+                entity.getQuestion(),
                 entity.getResponse(),
                 convertEvaluationToDTO(entity.getEvaluationId()),
                 convertDailyTrainingToDTO(entity.getDailyTrainingId()),
@@ -104,4 +130,20 @@ public class ChatGptResponseService {
                 convertTypeTrainingToDTO(dailyTrainingEntity.getTypeTrainingId()),
                 convertUserToDTO(dailyTrainingEntity.getUserId()));
     }
+
+    private int calculateAge(Date birthday) {
+        LocalDate birthDate = birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(birthDate, currentDate).getYears();
+    }
+
+    private String getUnfulfilledGoals(UserEntity user) {
+        List<GoalDTO> goals = goalBL.findGoalsByUserId(user.getUserId());
+        return goals.stream()
+                .filter(goal -> !goal.getAccomplished())
+                .map(goal -> goal.getTypeGoalId().getTypeGoal())
+                .distinct()
+                .collect(Collectors.joining(", "));
+    }
+
 }
