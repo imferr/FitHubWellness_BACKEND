@@ -1,0 +1,54 @@
+package bo.edu.ucb.fithubwelness.dto;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChatRequest {
+
+    private String model;
+    private List<Message> messages;
+    private int n;
+    private double temperature;
+
+    public ChatRequest(String model, String prompt) {
+        this.model = model;
+        
+        this.messages = new ArrayList<>();
+        this.messages.add(new Message("user", prompt));
+    }
+
+    // getters and setters:
+
+    public String getModel() {
+        return this.model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public List<Message> getMessages() {
+        return this.messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public int getN() {
+        return this.n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public double getTemperature() {
+        return this.temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+}
+

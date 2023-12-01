@@ -18,3 +18,9 @@ spring:
 exercisedb:
   api-key: 36a1b31265msh7d2166370a860a4p17801bjsn2823efa1f5a4
 
+# Configuración para la API de ChatGpt
+
+openai.model: gpt-3.5-turbo
+openai.api.url: https://api.openai.com/v1/chat/completions
+openai.api.key: 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
+
