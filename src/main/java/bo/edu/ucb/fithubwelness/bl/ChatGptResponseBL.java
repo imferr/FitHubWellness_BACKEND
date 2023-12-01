@@ -33,28 +33,47 @@ import java.util.stream.Collectors;
 @Service
 public class ChatGptResponseBL {
 
-    @Autowired
     private GoalBL goalBL;
+    private UserBL userBL;
+    private EvaluationBL evaluationBL;
+    private DailyTrainingBL dailyTrainingBL;
     private ChatGptResponseDAO chatGptResponseDAO;
     private RestTemplate restTemplate = new RestTemplate();
-    private final String CHATGPT_API_URL = "https://api.openai.com/v1/engines/gpt-4/completions";
-    private final String API_KEY = "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";
+
+    //TODO: Cambiar API_KEY por la API_KEY de OpenAI
+    private final String CHATGPT_API_URL = "https://api.openai.com/v1/engines/text-davinci-003/completions";
+    private final String API_KEY = "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";
     private Set<Integer> userFirstInteractionSet = new HashSet<>();
 
-    public ChatGptResponseDTO interactWithChatGpt(UserEntity user, EvaluationEntity evaluation,
-            DailyTrainingEntity dailyTraining, String question) {
+    @Autowired
+    public ChatGptResponseBL(GoalBL goalBL, UserBL userBL, EvaluationBL evaluationBL, DailyTrainingBL dailyTrainingBL,
+            ChatGptResponseDAO chatGptResponseDAO) {
+        this.goalBL = goalBL;
+        this.userBL = userBL;
+        this.evaluationBL = evaluationBL;
+        this.dailyTrainingBL = dailyTrainingBL;
+        this.chatGptResponseDAO = chatGptResponseDAO;
+    }
+
+    // Si es la primera interacción con el usuario, se le da la bienvenida y se le muestra su información
+    public ChatGptResponseDTO interactWithChatGpt(int userId, int evaluationId, int dailyTrainingId, String question) {
+        UserEntity user = userBL.findUserById(userId);
+        EvaluationEntity evaluation = evaluationBL.findEvaluationById(evaluationId);
+        DailyTrainingEntity dailyTraining = dailyTrainingBL.findDailyTrainingById(dailyTrainingId);
+
         String prompt;
         String storedQuestion = "-";
 
+    // Si es la primera interacción con el usuario, se le da la bienvenida y se le muestra su información
         if (!userFirstInteractionSet.contains(user.getUserId())) {
             prompt = buildWelcomeMessage(user, evaluation);
             userFirstInteractionSet.add(user.getUserId());
         } else {
-            prompt = question;
-            storedQuestion = question;
+            prompt = question; // Si no es la primera interacción, se muestra la pregunta que hizo el usuario anteriormente
+            storedQuestion = question; // Se guarda la pregunta que hizo el usuario anteriormente
         }
 
-        String chatGptResponse = callChatGptApi(prompt);
+        String chatGptResponse = callChatGptApi(prompt); // Se llama a la API de ChatGPT
 
         return saveChatGptResponse(storedQuestion, chatGptResponse, user, evaluation, dailyTraining);
     }
@@ -75,6 +94,7 @@ public class ChatGptResponseBL {
         return responseBody != null ? (String) responseBody.get("text") : "";
     }
 
+    // Primera interacción con el usuario
     private String buildWelcomeMessage(UserEntity user, EvaluationEntity evaluation) {
         return "Hola " + user.getName() + ", será un gusto ayudarte con tus preguntas. "
                 + "Considerando tu edad de " + calculateAge(user.getBirthday()) + " años, "
@@ -85,7 +105,13 @@ public class ChatGptResponseBL {
     }
 
     private int calculateAge(Date birthday) {
-        LocalDate birthDate = birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        // Convertir java.sql.Date a java.util.Date
+        java.util.Date utilDate = new java.util.Date(birthday.getTime());
+
+        // Convertir java.util.Date a LocalDate
+        LocalDate birthDate = utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Calcular la edad
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
@@ -101,14 +127,28 @@ public class ChatGptResponseBL {
 
     private ChatGptResponseDTO saveChatGptResponse(String question, String response, UserEntity user,
             EvaluationEntity evaluation, DailyTrainingEntity dailyTraining) {
-        ChatGptResponseEntity entity = new ChatGptResponseEntity();
+        ChatGptResponseEntity entity;
+
+        boolean isNewConversation = question.equalsIgnoreCase("iniciar nueva conversación");
+
+        if (isNewConversation) {
+            entity = new ChatGptResponseEntity();
+        } else {
+            List<ChatGptResponseEntity> userResponses = chatGptResponseDAO.findByUserId(user);
+            if (!userResponses.isEmpty()) {
+                entity = userResponses.get(0);
+            } else {
+                entity = new ChatGptResponseEntity();
+            }
+        }
+
         entity.setQuestion(question);
         entity.setResponse(response);
         entity.setUserId(user);
         entity.setEvaluationId(evaluation);
         entity.setDailyTrainingId(dailyTraining);
-        chatGptResponseDAO.save(entity);
 
+        chatGptResponseDAO.save(entity);
         return convertToDTO(entity);
     }
 
@@ -144,6 +184,14 @@ public class ChatGptResponseBL {
         dto.setUserId(userDTO);
 
         return dto;
+    }
+
+    public List<ChatGptResponseDTO> getConversationsByUserId(int userId) {
+        UserEntity user = userBL.findUserById(userId);
+        List<ChatGptResponseEntity> responses = chatGptResponseDAO.findByUserId(user);
+        return responses.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 }

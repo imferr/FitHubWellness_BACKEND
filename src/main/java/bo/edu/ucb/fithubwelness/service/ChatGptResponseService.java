@@ -40,14 +40,17 @@ public class ChatGptResponseService {
     private GoalBL goalBL;
     private ChatGptResponseDAO chatGptResponseDAO;
     private RestTemplate restTemplate = new RestTemplate();
-    private final String CHATGPT_API_URL = "https://api.openai.com/v1/engines/gpt-4/completions";
-    private final String API_KEY = "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";
+
+    //TODO: Cambiar API_KEY por la API_KEY de OpenAI
+    private final String CHATGPT_API_URL = "https://api.openai.com/v1/engines/text-davinci-003/completions";
+    private final String API_KEY = "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";
     private Set<Integer> userFirstInteractionSet = new HashSet<>();
 
     public ChatGptResponseDTO getChatGptResponse(UserEntity user, EvaluationEntity evaluation,
             DailyTrainingEntity dailyTraining, String question) {
         String prompt;
 
+        // Si es la primera interacción con el usuario, se le da la bienvenida y se le muestra su información
         if (!userFirstInteractionSet.contains(user.getUserId())) {
             prompt = "Hola " + user.getName() + ", será un gusto ayudarte con tus preguntas. "
                     + "Considerando tu edad de " + calculateAge(user.getBirthday()) + " años, "
@@ -57,13 +60,18 @@ public class ChatGptResponseService {
                     + ".";
             userFirstInteractionSet.add(user.getUserId());
         } else {
+            // Si no es la primera interacción, se muestra la pregunta que hizo el usuario anteriormente
             prompt = question;
         }
 
         HttpHeaders headers = new HttpHeaders();
+        // Se agrega el API key de OpenAI
         headers.setBearerAuth(API_KEY);
+        // Se agrega el prompt a la petición HTTP que se hará a la API de OpenAI
+        // El prompt es la pregunta que hizo el usuario
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(Map.of("prompt", prompt), headers);
 
+        // Se hace la petición HTTP a la API de OpenAI
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                 CHATGPT_API_URL,
                 HttpMethod.POST,
@@ -71,11 +79,13 @@ public class ChatGptResponseService {
                 new ParameterizedTypeReference<Map<String, Object>>() {
                 });
 
+                // Se obtiene la respuesta de la API de OpenAI
         Map<String, Object> responseBody = response.getBody();
         String chatGptResponse = responseBody != null ? (String) responseBody.get("text") : "";
         return saveChatGptResponse(chatGptResponse, user, evaluation, dailyTraining);
     }
 
+    // Se guarda la respuesta de la API de OpenAI en la base de datos
     private ChatGptResponseDTO saveChatGptResponse(String response, UserEntity user, EvaluationEntity evaluation,
             DailyTrainingEntity dailyTraining) {
         ChatGptResponseEntity entity = new ChatGptResponseEntity();
@@ -88,6 +98,7 @@ public class ChatGptResponseService {
         return convertToDTO(entity);
     }
 
+    // Se obtienen todas las conversaciones que tuvo un usuario con el chatbot 
     private ChatGptResponseDTO convertToDTO(ChatGptResponseEntity entity) {
         return new ChatGptResponseDTO(
                 entity.getChatId(),
@@ -132,11 +143,18 @@ public class ChatGptResponseService {
     }
 
     private int calculateAge(Date birthday) {
-        LocalDate birthDate = birthday.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        // Convertir java.sql.Date a java.util.Date
+        java.util.Date utilDate = new java.util.Date(birthday.getTime());
+
+        // Convertir java.util.Date a LocalDate
+        LocalDate birthDate = utilDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Calcular la edad
         LocalDate currentDate = LocalDate.now();
         return Period.between(birthDate, currentDate).getYears();
     }
 
+    // Se obtienen los objetivos que no cumplió el usuario
     private String getUnfulfilledGoals(UserEntity user) {
         List<GoalDTO> goals = goalBL.findGoalsByUserId(user.getUserId());
         return goals.stream()
