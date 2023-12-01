@@ -42,6 +42,8 @@ CREATE TABLE GOAL (
     accomplished boolean  NOT NULL,
     quantity numeric(10,5)  NOT NULL,
     exerciseName varchar(500)  NOT NULL,
+    date date  NOT NULL,
+    accomplishedDate date  NULL,
     USERS_userId Serial  NOT NULL,
     TYPE_GOAL_typeGoalId Serial  NOT NULL,
     CONSTRAINT GOAL_pk PRIMARY KEY (goalId)

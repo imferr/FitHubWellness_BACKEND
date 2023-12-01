@@ -2,7 +2,6 @@ package bo.edu.ucb.fithubwelness.bl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import bo.edu.ucb.fithubwelness.dao.PersonalRecordDAO;
@@ -25,8 +24,8 @@ public class PersonalRecordBL {
     }
 
     public PersonalRecordDTO createPersonalRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
-        if (checkIfExerciseRecordExists(personalRecordDTO.getExerciseName(), user)) {
-            throw new RuntimeException("Ya existe un registro con este nombre de ejercicio.");
+        if (checkForDuplicateRecord(personalRecordDTO, user)) {
+            throw new RuntimeException("Ya existe un registro con estos valores.");
         }
         List<ExerciseDTO> exercises = exerciseBL.findExercisesByName(personalRecordDTO.getExerciseName());
         if (!exercises.isEmpty()) {
@@ -44,6 +43,9 @@ public class PersonalRecordBL {
     }
 
     public PersonalRecordDTO updatePersonalRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
+        if (checkForDuplicateRecord(personalRecordDTO, user)) {
+            throw new RuntimeException("Ya existe un registro con estos valores.");
+        }
         PersonalRecordEntity existingPersonalRecord = personalRecordDAO
                 .findByPersonalRecordId(personalRecordDTO.getPersonalRecordId());
         if (existingPersonalRecord == null) {
@@ -51,25 +53,18 @@ public class PersonalRecordBL {
         }
         existingPersonalRecord.setWeight(personalRecordDTO.getWeight());
         existingPersonalRecord.setRepetitions(personalRecordDTO.getRepetitions());
-        String nextExerciseName = findNextExerciseName(personalRecordDTO.getExerciseName());
-        existingPersonalRecord.setExerciseName(nextExerciseName);
+        existingPersonalRecord.setExerciseName(personalRecordDTO.getExerciseName());
+        existingPersonalRecord.setDate(new java.sql.Date(System.currentTimeMillis()));
         personalRecordDAO.save(existingPersonalRecord);
         goalBL.checkAndAccomplishGoals(user, this);
         return convertToDTO(existingPersonalRecord);
     }
 
-    private boolean checkIfExerciseRecordExists(String exerciseName, UserEntity user) {
+    private boolean checkForDuplicateRecord(PersonalRecordDTO personalRecordDTO, UserEntity user) {
         List<PersonalRecordEntity> records = personalRecordDAO.findByUserIdUserId(user.getUserId());
-        return records.stream().anyMatch(record -> record.getExerciseName().equalsIgnoreCase(exerciseName));
-    }
-
-    private String findNextExerciseName(String currentExerciseName) {
-        List<ExerciseDTO> exercises = exerciseBL.findAllExercises();
-        return exercises.stream()
-                .filter(e -> e.getName().compareToIgnoreCase(currentExerciseName) > 0)
-                .min(Comparator.comparing(ExerciseDTO::getName))
-                .map(ExerciseDTO::getName)
-                .orElse(currentExerciseName);
+        return records.stream().anyMatch(record -> record.getWeight().equals(personalRecordDTO.getWeight()) &&
+                record.getRepetitions().equals(personalRecordDTO.getRepetitions()) &&
+                record.getExerciseName().equalsIgnoreCase(personalRecordDTO.getExerciseName()));
     }
 
     public PersonalRecordDTO convertToDTO(PersonalRecordEntity entity) {
@@ -98,5 +93,4 @@ public class PersonalRecordBL {
         }
         return convertToDTO(record);
     }
-    
 }

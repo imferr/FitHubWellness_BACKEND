@@ -1,5 +1,7 @@
 package bo.edu.ucb.fithubwelness.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,6 +22,12 @@ public class GoalEntity {
     @Column(name = "exercisename", nullable = false, length = 500)
     private String exerciseName;
 
+    @Column(name = "date", nullable = false)
+    private Date date;
+
+    @Column(name = "accomplisheddate", nullable = true)
+    private Date accomplishedDate;
+
     @ManyToOne
     @JoinColumn(name = "users_userid", referencedColumnName = "userid", nullable = false)
     private UserEntity userId;
@@ -31,11 +39,13 @@ public class GoalEntity {
     public GoalEntity() {
     }
 
-    public GoalEntity(Integer goalId, Boolean accomplished, Double quantity, String exerciseName, UserEntity userId, TypeGoalEntity typeGoalId) {
+    public GoalEntity(Integer goalId, Boolean accomplished, Double quantity, String exerciseName, Date date, Date accomplishedDate, UserEntity userId, TypeGoalEntity typeGoalId) {
         this.goalId = goalId;
         this.accomplished = accomplished;
         this.quantity = quantity;
         this.exerciseName = exerciseName;
+        this.date = date;
+        this.accomplishedDate = accomplishedDate;
         this.userId = userId;
         this.typeGoalId = typeGoalId;
     }
@@ -56,6 +66,14 @@ public class GoalEntity {
 
     public String getExerciseName() {
         return exerciseName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Date getAccomplishedDate() {
+        return accomplishedDate;
     }
 
     public UserEntity getUserId() {
@@ -84,6 +102,14 @@ public class GoalEntity {
         this.exerciseName = exerciseName;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setAccomplishedDate(Date accomplishedDate) {
+        this.accomplishedDate = accomplishedDate;
+    }
+
     public void setUserId(UserEntity userId) {
         this.userId = userId;
     }
@@ -99,6 +125,8 @@ public class GoalEntity {
                 ", accomplished=" + accomplished +
                 ", quantity=" + quantity +
                 ", exerciseName='" + exerciseName + '\'' +
+                ", date=" + date +
+                ", accomplishedDate=" + accomplishedDate +
                 ", userId=" + userId +
                 ", typeGoalId=" + typeGoalId +
                 '}';

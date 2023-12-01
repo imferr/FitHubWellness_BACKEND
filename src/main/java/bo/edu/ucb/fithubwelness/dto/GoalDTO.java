@@ -1,23 +1,28 @@
 package bo.edu.ucb.fithubwelness.dto;
 
+import java.sql.Date;
+
 public class GoalDTO {
 
     private int goalId;
     private Boolean accomplished;
     private Double quantity;
     private String exerciseName;
+    private Date date;
+    private Date accomplishedDate;
     private UserDTO userId;
     private TypeGoalDTO typeGoalId;
 
     public GoalDTO() {
     }
 
-    public GoalDTO(int goalId, Boolean accomplished, Double quantity, String exerciseName, UserDTO userId,
-            TypeGoalDTO typeGoalId) {
+    public GoalDTO(int goalId, Boolean accomplished, Double quantity, String exerciseName, Date date, Date accomplishedDate, UserDTO userId, TypeGoalDTO typeGoalId) {
         this.goalId = goalId;
         this.accomplished = accomplished;
         this.quantity = quantity;
         this.exerciseName = exerciseName;
+        this.date = date;
+        this.accomplishedDate = accomplishedDate;
         this.userId = userId;
         this.typeGoalId = typeGoalId;
     }
@@ -38,6 +43,14 @@ public class GoalDTO {
 
     public String getExerciseName() {
         return exerciseName;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Date getAccomplishedDate() {
+        return accomplishedDate;
     }
 
     public UserDTO getUserId() {
@@ -66,6 +79,14 @@ public class GoalDTO {
         this.exerciseName = exerciseName;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setAccomplishedDate(Date accomplishedDate) {
+        this.accomplishedDate = accomplishedDate;
+    }
+
     public void setUserId(UserDTO userId) {
         this.userId = userId;
     }
@@ -80,6 +101,8 @@ public class GoalDTO {
                 ", accomplished=" + accomplished +
                 ", quantity=" + quantity +
                 ", exerciseName=" + exerciseName +
+                ", date=" + date +
+                ", accomplishedDate=" + accomplishedDate +
                 ", userId=" + userId +
                 ", typeGoalId=" + typeGoalId +
                 '}';

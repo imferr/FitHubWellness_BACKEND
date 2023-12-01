@@ -25,7 +25,7 @@ public class PersonalRecordAPI {
     }
 
     @PostMapping("/create/user/{userId}")
-    public ResponseEntity<PersonalRecordDTO> createPersonalRecord(@PathVariable int userId,
+    public ResponseEntity<?> createPersonalRecord(@PathVariable int userId,
             @RequestBody PersonalRecordDTO personalRecordDTO) {
         LOGGER.info("Inicio de creacion de personal record");
         try {
@@ -35,17 +35,19 @@ public class PersonalRecordAPI {
             PersonalRecordDTO createdRecord = personalRecordBL.createPersonalRecord(personalRecordDTO, user);
             LOGGER.info("Personal record creado con exito");
             return ResponseEntity.ok(createdRecord);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             LOGGER.severe("Error al crear personal record: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            LOGGER.severe("Error interno al crear personal record: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             LOGGER.info("Fin de creacion de personal record");
         }
     }
 
     @PutMapping("/user/{userId}/update/{recordId}")
-    public ResponseEntity<PersonalRecordDTO> updatePersonalRecord(@PathVariable int userId,
-            @PathVariable int recordId,
+    public ResponseEntity<?> updatePersonalRecord(@PathVariable int userId, @PathVariable int recordId,
             @RequestBody PersonalRecordDTO personalRecordDTO) {
         LOGGER.info("Inicio de actualizacion de personal record");
         try {
@@ -56,9 +58,12 @@ public class PersonalRecordAPI {
             PersonalRecordDTO updatedRecord = personalRecordBL.updatePersonalRecord(personalRecordDTO, user);
             LOGGER.info("Personal record actualizado con exito");
             return ResponseEntity.ok(updatedRecord);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             LOGGER.severe("Error al actualizar personal record: " + e.getMessage());
-            return ResponseEntity.badRequest().build();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            LOGGER.severe("Error interno al actualizar personal record: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
             LOGGER.info("Fin de actualizacion de personal record");
         }
